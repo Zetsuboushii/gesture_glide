@@ -1,3 +1,6 @@
+import time
+
+
 def cam():
 
     import cv2
@@ -35,18 +38,10 @@ def switching():
     from pywinauto import application
 
     app = application.Application()
-    app2 = application.Application()
-    app.start("Notepad.exe")
-    app2.start(r"C:\Users\nickb\Downloads\Gluecksrad\Gluecksrad.bat")
-
-    # switch to Notepad
-    app.UntitledNotepad.SetFocus()
-    # select and copy next line (this is not the only way, just for example)
-    app.UntitledNotepad.Edit.TypeKeys('{DOWN}{HOME}+{END}^c')
-
-    # switch to your app
-    app2.SpeakEditWindowTitle.SetFocus()
-    # paste somewhere
+    app.start(r"Gluecksrad\Gluecksrad.bat")
+    time.sleep(5)
+    window = app.top_window()
+    window.type_keys('{SPACE}')
 
 print("do selected")
-cam()
+switching()
