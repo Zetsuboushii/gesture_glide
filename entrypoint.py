@@ -1,11 +1,13 @@
 import click
 
+from gesture_glide.config import load_config
 from gesture_glide.engine_controller import EngineController
 
 
 @click.command()
 def main():
-    controller = EngineController()
+    config = load_config()
+    controller = EngineController(config)
     controller.run()
 
 

@@ -1,0 +1,5 @@
+scroll_distance_threshold: 0.1
+shortcuts:
+  - type: open
+    class_name: GlassWndClass-GlassWindowClass-2
+    mode: roulette

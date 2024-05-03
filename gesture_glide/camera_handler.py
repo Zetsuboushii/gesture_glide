@@ -14,6 +14,6 @@ class CameraHandler(Observable):
         while True:
             success, frame = capture.read()
             cv2.imshow('Capture', frame)
-            self.notify_observers(frame)
+            self.notify_observers(frame=frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break

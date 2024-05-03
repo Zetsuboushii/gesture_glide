@@ -8,4 +8,20 @@ class ScrollRecognizer(Observer, Observable):
         mp_wrapper.add_observer(self)
 
     def update(self, observable, *args, **kwargs):
-        self.notify_observers(None)
+        metadata = kwargs["metadata"]
+        width = metadata["width"]
+        height = metadata["height"]
+        multihand_landmarks = kwargs["multihand_landmarks"]
+        command = ScrollData(1, 200, 1)
+        self.notify_observers(scroll_command=command)
+
+class ScrollData:
+    direction: int
+    distance: float
+    # seconds
+    duration: float
+
+    def __init__(self, direction: int, distance: float, duration: float):
+        self.direction = direction
+        self.distance = distance
+        self.duration = duration

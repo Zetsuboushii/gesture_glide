@@ -8,4 +8,11 @@ class MPWrapper(Observer, Observable):
         camera_handler.add_observer(self)
 
     def update(self, observable, *args, **kwargs):
-        pass
+        frame = kwargs["frame"]
+        metadata = {
+            "width": frame.shape[0],
+            "height": frame.shape[1]
+        }
+        # Multihand landmarks -> hand landmarks -> landmark[x, y, z]
+        landmarks = []
+        self.notify_observers(metadata=metadata, multihand_landmarks=landmarks)
