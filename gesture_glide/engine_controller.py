@@ -17,9 +17,4 @@ class EngineController:
         self.gesture_interpreter = GestureInterpreter(self.mp_wrapper, self.scroll_recognizer)
 
     def run(self):
-        raise NotImplementedError()
-
-
-def main():
-    controller = EngineController()
-    controller.run()
+        self.camera_handler.run()
