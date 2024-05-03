@@ -91,4 +91,3 @@ Zu Beginn das Projekt klonen und folgende Befehle ausführen:
 ##### 4.1.2 API-Referenz
 
 #### 4.2 Benutzeroberfläche
-
