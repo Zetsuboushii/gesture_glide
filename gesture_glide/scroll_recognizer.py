@@ -8,4 +8,4 @@ class ScrollRecognizer(Observer, Observable):
         mp_wrapper.add_observer(self)
 
     def update(self, observable, *args, **kwargs):
-        print("ScrollRecognizer: received mpwrapper data: ", observable)
+        self.notify_observers(None)

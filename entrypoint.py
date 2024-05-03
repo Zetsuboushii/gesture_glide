@@ -1,10 +1,13 @@
 import click
-from gesture_glide import config
+
+from gesture_glide.engine_controller import EngineController
+
 
 @click.command()
-def entrypoint():
-    config = config.load_config()
-    print(config)
+def main():
+    controller = EngineController()
+    controller.run()
 
-if __name__ == "__main__":
-    entrypoint()
+
+if __name__ == '__main__':
+    main()

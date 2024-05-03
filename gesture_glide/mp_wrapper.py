@@ -8,4 +8,4 @@ class MPWrapper(Observer, Observable):
         camera_handler.add_observer(self)
 
     def update(self, observable, *args, **kwargs):
-        print("MPWrapper: received update: ", observable)
+        pass
