@@ -4,7 +4,9 @@ from gesture_glide.shortcuts.application_shortcut import ApplicationShortcut
 
 class GenericScrollShortcut(ApplicationShortcut):
     def execute(self, **kwargs):
-        self.scroll_action(kwargs["scroll_command"])
+        scroll_command = kwargs["scroll_command"]
+        if scroll_command is not None:
+            self.scroll_action(scroll_command)
 
     def scroll_action(self, command: ScrollData):
         # Simulates mouse wheel actions based on detected hand movement direction
