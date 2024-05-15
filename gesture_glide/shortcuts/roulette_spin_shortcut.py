@@ -1,5 +1,5 @@
 import logging
-
+from pywinauto.keyboard import send_keys
 from gesture_glide.shortcuts.application_shortcut import ApplicationShortcut
 
 
