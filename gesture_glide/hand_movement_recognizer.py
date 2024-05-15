@@ -127,6 +127,7 @@ class HandMovementRecognizer(Observer, Observable):
                     index_tip = hand_landmarks.landmark[self.mp_wrapper.mp_hands.HandLandmark.INDEX_FINGER_TIP]
                     current_thumb_index_distance = self.get_euclidean_distance(thumb_tip, index_tip)
 
+                    #TODO change to work with frame array like scrolling
                     if self.previous_thumb_index_distance is not None:
                         zoom_command = self.recognize_zoom_movement(self.previous_thumb_index_distance,
                                                                     current_thumb_index_distance)
