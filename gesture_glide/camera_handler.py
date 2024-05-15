@@ -1,3 +1,4 @@
+import threading
 import time
 
 import cv2
@@ -19,14 +20,12 @@ class CameraHandler(Observable):
         super().__init__()
         self.frame_count = 0
 
-    def run(self):
+    def run(self, stop_event: threading.Event):
         capture = cv2.VideoCapture(0)
         start_time = time.time()
         last_frame_time = start_time
-        while True:
+        while not stop_event.is_set():
             success, frame = capture.read()
-            cv2.imshow('Capture', frame)
-
             metadata = FrameMetadata(width=frame.shape[0], height=frame.shape[1])
             time_from_last_frame = time.time() - last_frame_time
             frame_rate = 1 / time_from_last_frame
