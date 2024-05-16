@@ -1,6 +1,6 @@
 ```mermaid
 ---
-title: Architecture Model GestureGlide
+title: Kontrollfluss GestureGlide
 ---
 flowchart LR
     EntryPoint(Entry Point) --> EngineController
