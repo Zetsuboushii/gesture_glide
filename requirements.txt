@@ -1,5 +1,5 @@
 jupyter
 opencv-python
-mediapipe==0.10.9
+mediapipe==0.10.14
 pyyaml==6.0.1
 click==8.1.7
