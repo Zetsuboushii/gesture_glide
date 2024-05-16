@@ -28,7 +28,7 @@ class CameraHandler(Observable):
             success, frame = capture.read()
             metadata = FrameMetadata(width=frame.shape[0], height=frame.shape[1])
             time_from_last_frame = time.time() - last_frame_time
-            frame_rate = 1 / time_from_last_frame
+            frame_rate = 1 / time_from_last_frame if time_from_last_frame > 0 else None
             self.notify_observers(frame=frame, metadata=metadata, frame_rate=frame_rate)
             self.frame_count += 1
             last_frame_time = time.time()
