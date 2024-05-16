@@ -76,6 +76,7 @@ def setup_gui(root: Tk, controller: EngineController):
 def exit_program(root: Tk, controller: EngineController):
     controller.stop()
     root.destroy()
+    exit(0)
 
 
 def run_gui(controller: EngineController):

@@ -21,16 +21,15 @@ class EngineController:
         self.camera_handler = CameraHandler()
         self.mp_wrapper = MPWrapper(self.camera_handler)
         self.scroll_recognizer = HandMovementRecognizer(self.mp_wrapper)
-        self.gesture_interpreter = GestureInterpreter(self.config, self.mp_wrapper, self.scroll_recognizer)
-        self.stop_event = Event()
+        self.gesture_interpreter = GestureInterpreter(self.config, self.mp_wrapper,
+                                                      self.scroll_recognizer)
         self.running_thread = None
 
     def run(self):
-        self.stop_event.clear()
-        self.running_thread = Thread(target=lambda: self.camera_handler.run(self.stop_event))
+        self.running_thread = Thread(target=lambda: self.camera_handler.run())
         self.running_thread.start()
 
     def stop(self):
-        self.stop_event.set()
+        self.camera_handler.stop_event.set()
         if self.running_thread is not None:
-            self.running_thread.join()
+            self.running_thread.join(1)

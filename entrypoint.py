@@ -12,7 +12,6 @@ def main():
     engine_controller.run()
 
     run_gui(engine_controller)
-    print("Ran gui.")
 
     engine_controller.stop()
     exit(0)
