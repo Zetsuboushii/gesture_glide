@@ -60,10 +60,9 @@ class HandMovementRecognizer(Observer, Observable):
         self.hand_presence_threshold = 2  # seconds
 
     def get_past_comparison_hand(self, hand_data_array):
-        return next(x for x in hand_data_array if x[0] > time.time() - DELTA_TIME)
+        return next(x[1] for x in hand_data_array if x[0] > time.time() - DELTA_TIME)
 
-    def get_hand_landmarks(self, previous_hand_data, target_handedness: Handedness):
-        _, hands = previous_hand_data
+    def get_hand_landmark(self, hands, target_handedness: Handedness):
         if hands.multi_hand_landmarks:
             for hand_landmarks, handedness in zip(hands.multi_hand_landmarks, hands.multi_handedness):
                 if handedness.classification[0].label == target_handedness.value:
@@ -103,39 +102,42 @@ class HandMovementRecognizer(Observer, Observable):
         zoom_command: ZoomData | None = None
 
         hand_detected = False
+        frame_height = metadata.height
 
-        if results.multi_hand_landmarks:
-            for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-                if handedness.classification[0].label == 'Right':
-                    hand_detected = True
-                    wrist_y = hand_landmarks.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST].y
-                    frame_height = metadata.height
-                    previous_hand_landmarks = self.get_hand_landmarks(
-                        self.get_past_comparison_hand(kwargs["hand_data_buffer"]),
-                        Handedness.RIGHT)
-                    if previous_hand_landmarks is not None:
-                        previous_wrist_y = previous_hand_landmarks.landmark[
-                                               self.mp_wrapper.mp_hands.HandLandmark.WRIST].y * frame_height
-                    else:
-                        previous_wrist_y = None
+        hand_landmarks_right = self.get_hand_landmark(results, Handedness.RIGHT)
+        hand_landmarks_left = self.get_hand_landmark(results, Handedness.LEFT)
 
-                    if previous_wrist_y is not None:
-                        scroll_command = self.recognize_y_movement(previous_wrist_y, wrist_y * frame_height,
-                                                                   frame_height)
+        if hand_landmarks_right:
+            hand_detected = True
+            wrist_y_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST].y
+            previous_hand_landmarks = self.get_hand_landmark(
+                self.get_past_comparison_hand(kwargs["hand_data_buffer"]),
+                Handedness.RIGHT)
+            if previous_hand_landmarks is not None:
+                previous_wrist_y = previous_hand_landmarks.landmark[
+                                       self.mp_wrapper.mp_hands.HandLandmark.WRIST].y * frame_height
+            else:
+                previous_wrist_y = None
 
-                    thumb_tip = hand_landmarks.landmark[self.mp_wrapper.mp_hands.HandLandmark.THUMB_TIP]
-                    index_tip = hand_landmarks.landmark[self.mp_wrapper.mp_hands.HandLandmark.INDEX_FINGER_TIP]
-                    current_thumb_index_distance = self.get_euclidean_distance(thumb_tip, index_tip)
+            if previous_wrist_y is not None:
+                scroll_command = self.recognize_y_movement(previous_wrist_y, wrist_y_right * frame_height,
+                                                           frame_height)
 
-                    #TODO change to work with frame array like scrolling
-                    if self.previous_thumb_index_distance is not None:
-                        zoom_command = self.recognize_zoom_movement(self.previous_thumb_index_distance,
-                                                                    current_thumb_index_distance)
+            thumb_tip = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.THUMB_TIP]
+            index_tip = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.INDEX_FINGER_TIP]
+            current_thumb_index_distance = self.get_euclidean_distance(thumb_tip, index_tip)
 
-                    self.previous_thumb_index_distance = current_thumb_index_distance
+            # TODO change to work with frame array like scrolling
+            if self.previous_thumb_index_distance is not None:
+                zoom_command = self.recognize_zoom_movement(self.previous_thumb_index_distance,
+                                                            current_thumb_index_distance)
 
-                    mp.solutions.drawing_utils.draw_landmarks(frame, hand_landmarks,
-                                                              self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
+            self.previous_thumb_index_distance = current_thumb_index_distance
+
+        mp.solutions.drawing_utils.draw_landmarks(frame, hand_landmarks_right,
+                                                  self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
+        mp.solutions.drawing_utils.draw_landmarks(frame, hand_landmarks_left,
+                                                  self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
 
         send_scroll_command = False
         send_zoom_command = False
