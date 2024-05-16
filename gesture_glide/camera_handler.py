@@ -24,7 +24,12 @@ class CameraHandler(Observable):
         capture = cv2.VideoCapture(0)
         start_time = time.time()
         last_frame_time = start_time
-        while not stop_event.is_set():
+        while True:
+            if stop_event.is_set():
+                print("Stop event set.")
+                break
+            else:
+                print("Stop event unset.")
             success, frame = capture.read()
             metadata = FrameMetadata(width=frame.shape[0], height=frame.shape[1])
             time_from_last_frame = time.time() - last_frame_time
