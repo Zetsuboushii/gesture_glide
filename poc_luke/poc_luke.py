@@ -1,9 +1,10 @@
 import cv2
 import mediapipe as mp
 import json
+import numpy as np
 
 # Lade Gesten Config File
-with open('gesture_config.json', 'r') as file:
+with open('fist_gesture.json', 'r') as file:
     gestures_config = json.load(file)
 
 # Initialisiere MediaPipe Hände
@@ -19,13 +20,9 @@ class LandmarkRecorder:
     def add_landmarks(self, landmarks):
         self.landmarks_history.append(landmarks)
 
-    def print_landmarks(self):
-        for frame_num, landmarks in enumerate(self.landmarks_history):
-            print(f"Frame {frame_num}: {landmarks}")
-
 # Funktion zum Erkennen von Handgesten und Aufzeichnen der Landmarks
 def detect_and_record_landmarks(frame, landmark_recorder):
-    # Konvertiere das Bild zu RGB; warum auch immer
+    # Konvertiere das Bild zu RGB
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     # MediaPipe um Hände zu erkennen
@@ -39,8 +36,10 @@ def detect_and_record_landmarks(frame, landmark_recorder):
 
             # Durchlaufe die definierten Gesten und vergleiche die Landmarks
             for gesture in gestures_config['gestures']:
-                if compare_landmarks(landmarks, gesture['landmarks']):
-                    print("Erkannte Geste:", gesture['name'], "-", gesture['description'])
+                for ref_landmarks in gesture['landmarks']:
+                    if compare_landmarks(landmarks, ref_landmarks):
+                        print("Erkannte Geste:", gesture['name'], "-", gesture['description'])
+                        break
 
             # Paint
             mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
@@ -49,14 +48,25 @@ def detect_and_record_landmarks(frame, landmark_recorder):
 
 # Funktion zum Vergleichen von Landmarks
 def compare_landmarks(landmarks1, landmarks2):
-    # Vergleiche die Landmarks anhand der Distanz zwischen den Punkten
-    # Euklidischen Abstand für threshold
-    threshold = 0.1  # Threshold für die Distanz zwischen Landmarks
-    for lm1, lm2 in zip(landmarks1, landmarks2):
-        distance = ((lm1[0] - lm2[0]) ** 2 + (lm1[1] - lm2[1]) ** 2) ** 0.5
-        if distance > threshold:
-            return False
-    return True
+    # Normiere die Landmarks
+    landmarks1 = np.array(landmarks1)
+    landmarks2 = np.array(landmarks2)
+
+    def normalize(landmarks):
+        mean = np.mean(landmarks, axis=0)
+        max_dist = np.max(np.linalg.norm(landmarks - mean, axis=1))
+        return (landmarks - mean) / max_dist
+
+    normalized_landmarks1 = normalize(landmarks1)
+    normalized_landmarks2 = normalize(landmarks2)
+
+    # Berechne Euklidischen Abstand für threshold
+    threshold = 0.1
+    distances = np.linalg.norm(normalized_landmarks1 - normalized_landmarks2, axis=1)
+    mean_distance = np.mean(distances)
+
+    # Debugging-Ausgabe
+    return mean_distance < threshold
 
 # Mao Zhedong Surveillance Activated
 cap = cv2.VideoCapture(0)
