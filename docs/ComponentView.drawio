@@ -1,28 +1,28 @@
-<mxfile host="app.diagrams.net" modified="2024-05-17T09:51:12.359Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0" etag="DCrQPPP8u4YBRGm19y-M" version="24.4.3" type="device">
+<mxfile host="app.diagrams.net" modified="2024-05-17T13:27:15.657Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0" etag="dvFaWAJR9b65USGG4ZeN" version="24.4.3" type="device">
   <diagram name="Seite-1" id="FlxHqYpVM7WwrjAAbNVC">
     <mxGraphModel dx="989" dy="512" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-1" value="&lt;div style=&quot;font-size: 11px;&quot;&gt;EntryPoint&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-1" value="&lt;div style=&quot;font-size: 11px;&quot;&gt;EntryPoint&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="80" y="160" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" target="mJIAhEb5I7Z3ak2i3lBF-1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" target="mJIAhEb5I7Z3ak2i3lBF-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="40" y="180" as="sourcePoint" />
             <mxPoint x="80" y="179.76" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-3" value="&lt;div style=&quot;font-size: 11px;&quot;&gt;GUI&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-3" value="&lt;div style=&quot;font-size: 11px;&quot;&gt;GUI&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="80" y="40" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-4" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-3">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-4" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-3" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="250" y="155" as="sourcePoint" />
             <mxPoint x="120" y="100" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-5" value="start command" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-5" value="start command" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="210" y="155" as="sourcePoint" />
             <mxPoint x="120" y="100" as="targetPoint" />
@@ -30,62 +30,62 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-6" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-6" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="225" y="150" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-7" value="&lt;div style=&quot;font-size: 11px;&quot;&gt;EngineController&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-7" value="&lt;div style=&quot;font-size: 11px;&quot;&gt;EngineController&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="240" y="160" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-8" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-8" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="250" y="165" as="sourcePoint" />
-            <mxPoint x="220" y="180" as="targetPoint" />
+            <mxPoint x="240" y="169.6" as="sourcePoint" />
+            <mxPoint x="220" y="169.6" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-9" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-1">
-          <mxGeometry y="-10" relative="1" as="geometry">
-            <mxPoint x="210" y="165" as="sourcePoint" />
-            <mxPoint x="220" y="180" as="targetPoint" />
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-9" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" edge="1">
+          <mxGeometry y="14" relative="1" as="geometry">
+            <mxPoint x="160" y="169.6" as="sourcePoint" />
+            <mxPoint x="220" y="169.6" as="targetPoint" />
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-10" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-10" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="225" y="160" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-11" value="CameraHandler" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-11" value="CameraHandler" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="200" y="40" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-12" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.586;exitY=0.983;exitDx=0;exitDy=0;exitPerimeter=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-11">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-12" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.586;exitY=0.983;exitDx=0;exitDy=0;exitPerimeter=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-11" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="310" y="165" as="sourcePoint" />
             <mxPoint x="270" y="100" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-13" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-13" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="310" y="165" as="sourcePoint" />
             <mxPoint x="270" y="100" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-14" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-14" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="325" y="160" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-15" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-15" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="335" y="170" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-16" value="HandMovementRecognizer" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-16" value="HandMovementRecognizer" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="440" y="160" width="160" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-17" value="GestureRecognizer" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-17" value="GestureRecognizer" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="440" y="40" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-18" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-17">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-18" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-17" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="450" y="115" as="sourcePoint" />
             <mxPoint x="410" y="60" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-19" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.75;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-19" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.75;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7" edge="1">
           <mxGeometry x="0.4444" y="10" relative="1" as="geometry">
             <mxPoint x="410" y="115" as="sourcePoint" />
             <mxPoint x="410" y="60" as="targetPoint" />
@@ -95,87 +95,87 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-20" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-20" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="425" y="110" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-21" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-16">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-21" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-16" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="450" y="155" as="sourcePoint" />
             <mxPoint x="420" y="180" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-22" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7">
-          <mxGeometry y="10" relative="1" as="geometry">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-22" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7" edge="1">
+          <mxGeometry y="15" relative="1" as="geometry">
             <mxPoint x="410" y="155" as="sourcePoint" />
             <mxPoint x="420" y="180" as="targetPoint" />
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-23" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-23" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="425" y="150" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-24" value="GestureInterpreter" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-24" value="GestureInterpreter" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="240" y="280" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-25" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-25" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-7" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="330" y="255" as="sourcePoint" />
             <mxPoint x="270" y="220" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-26" value="config" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-24">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-26" value="config" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-24" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="290" y="255" as="sourcePoint" />
             <mxPoint x="270" y="220" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-27" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-27" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="305" y="250" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-28" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-28" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="329.8" y="200" as="sourcePoint" />
             <mxPoint x="329.8" y="220" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-29" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-29" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="329.8" y="280" as="sourcePoint" />
             <mxPoint x="329.8" y="220" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-30" value="Config" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-30" value="Config" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="80" y="280" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-31" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-31" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="119.80000000000001" y="200" as="sourcePoint" />
             <mxPoint x="119.80000000000001" y="220" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-32" value="config" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-32" value="config" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="119.80000000000001" y="280" as="sourcePoint" />
             <mxPoint x="119.80000000000001" y="220" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-33" value="ApplicationCommand" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-33" value="ApplicationCommand" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="240" y="400" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-36" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-36" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="435" y="230" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-39" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-39" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="435" y="230" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-40" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-24">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-40" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-24" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="460" y="235" as="sourcePoint" />
             <mxPoint x="380" y="290" as="targetPoint" />
             <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-41" value="&amp;lt;RegognizedGesture&amp;gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-16">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-41" value="&amp;lt;RecognizedGesture&amp;gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-16" edge="1">
           <mxGeometry x="0.3913" y="-10" relative="1" as="geometry">
             <mxPoint x="420" y="235" as="sourcePoint" />
             <mxPoint x="380" y="290" as="targetPoint" />
@@ -185,16 +185,16 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-42" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-42" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="435" y="230" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-43" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-24">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-43" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-24" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="460" y="235" as="sourcePoint" />
             <mxPoint x="380" y="310" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-44" value="&amp;lt;RegognizedGesture&amp;gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-17">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-44" value="&amp;lt;RecognizedGesture&amp;gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-17" edge="1">
           <mxGeometry x="0.7544" y="-10" relative="1" as="geometry">
             <mxPoint x="420" y="235" as="sourcePoint" />
             <mxPoint x="380" y="310" as="targetPoint" />
@@ -205,42 +205,61 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-45" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-45" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="435" y="230" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-46" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-33">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-46" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-33" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="440" y="305" as="sourcePoint" />
             <mxPoint x="300" y="380" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-47" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-24">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-47" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-24" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="400" y="305" as="sourcePoint" />
             <mxPoint x="300" y="380" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-48" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-48" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="415" y="300" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-49" value="OS" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-49" value="OS" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="440" y="400" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-50" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-49">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-50" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-49" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="440" y="325" as="sourcePoint" />
             <mxPoint x="420" y="420" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-51" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-33">
-          <mxGeometry y="10" relative="1" as="geometry">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-51" value="commands" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" source="mJIAhEb5I7Z3ak2i3lBF-33" edge="1">
+          <mxGeometry y="15" relative="1" as="geometry">
             <mxPoint x="400" y="325" as="sourcePoint" />
             <mxPoint x="420" y="420" as="targetPoint" />
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-52" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="mJIAhEb5I7Z3ak2i3lBF-52" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" parent="1" vertex="1">
           <mxGeometry x="415" y="320" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="vX1ygWQRSaH9QW2D1ksk-1" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="225" y="170" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="vX1ygWQRSaH9QW2D1ksk-2" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="189.6" as="sourcePoint" />
+            <mxPoint x="220" y="189.6" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vX1ygWQRSaH9QW2D1ksk-3" value="&lt;div&gt;config&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" edge="1" parent="1">
+          <mxGeometry y="-13" relative="1" as="geometry">
+            <mxPoint x="160" y="189.6" as="sourcePoint" />
+            <mxPoint x="220" y="189.6" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vX1ygWQRSaH9QW2D1ksk-4" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;fontFamily=Inter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DInter;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="225" y="180" width="10" height="10" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
