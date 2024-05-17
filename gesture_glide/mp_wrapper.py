@@ -7,6 +7,7 @@ from gesture_glide.camera_handler import CameraHandler
 from gesture_glide.utils import Observer, Observable
 import mediapipe as mp
 
+HAND_DATA_BUFFER = 20 #Frames
 
 class MPWrapper(Observer, Observable):
     def __init__(self, camera_handler: CameraHandler):
@@ -21,7 +22,7 @@ class MPWrapper(Observer, Observable):
         frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
         results = self.hands.process(frame)
         self.hand_data_buffer.append((time.time(),results))
-        if len(self.hand_data_buffer) > 4:
+        if len(self.hand_data_buffer) > HAND_DATA_BUFFER -1:
             self.hand_data_buffer.pop(0)
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) # TODO: Remove if appropriate
         # Multihand landmarks -> hand landmarks -> landmark[x, y, z]
