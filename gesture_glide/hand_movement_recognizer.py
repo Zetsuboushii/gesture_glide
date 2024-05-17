@@ -77,7 +77,7 @@ class HandMovementRecognizer(Observer, Observable):
         movement_distance = abs(current_y - previous_y)
         # TODO maybe adjust threshold if needed
         movement_threshold = 0.10 * height  # 10% of the frame height
-        print(movement_distance, movement_threshold)
+        # print(movement_distance, movement_threshold)
         if movement_distance > movement_threshold:
             if current_y < previous_y:
                 return ScrollData(ScrollDirection.UP, movement_distance)
@@ -145,9 +145,9 @@ class HandMovementRecognizer(Observer, Observable):
             if self.hand_start_time is None:
                 self.hand_start_time = time.time()
             hand_duration = time.time() - self.hand_start_time
-            # TODO implement better safte measurement
+            # TODO implement better safety measurement
             #  if hand is in screen, so that is doesnt start countdown again after hand is gone for some milliseconds
-            if hand_duration > self.hand_presence_threshold:
+            if hand_duration >= self.hand_presence_threshold:
                 if scroll_command is not None:
                     print(f"Sending scroll command: {scroll_command}")
                     send_scroll_command = True
