@@ -9,9 +9,8 @@ from gesture_glide.camera_handler import FrameMetadata
 from gesture_glide.mp_wrapper import MPWrapper
 from gesture_glide.utils import Observer, Observable
 
-# TODO maybe delta if needed
+# TODO maybe change delta if needed
 DELTA_TIME = 0.5
-
 
 class Handedness(enum.StrEnum):
     LEFT = "Left"
@@ -60,7 +59,7 @@ class HandMovementRecognizer(Observer, Observable):
         self.hand_presence_threshold = 2  # seconds
 
     def get_past_comparison_hand(self, hand_data_array):
-        return next(x[1] for x in hand_data_array if x[0] > time.time() - DELTA_TIME)
+        return next(x.results for x in hand_data_array if x.time > time.time() - DELTA_TIME)
 
     def get_hand_landmark(self, hands, target_handedness: Handedness):
         if hands.multi_hand_landmarks:
@@ -96,7 +95,7 @@ class HandMovementRecognizer(Observer, Observable):
 
     def update(self, observable, *args, **kwargs):
         metadata: FrameMetadata = kwargs["metadata"]
-        results = kwargs["results"]
+        results = kwargs["hand_data_buffer"][-1].results
         frame = kwargs["frame"]
         scroll_command: ScrollData | None = None
         zoom_command: ZoomData | None = None
@@ -141,21 +140,12 @@ class HandMovementRecognizer(Observer, Observable):
 
         send_scroll_command = False
         send_zoom_command = False
-        if hand_detected:
-            if self.hand_start_time is None:
-                self.hand_start_time = time.time()
-            hand_duration = time.time() - self.hand_start_time
-            # TODO implement better safety measurement
-            #  if hand is in screen, so that is doesnt start countdown again after hand is gone for some milliseconds
-            if hand_duration >= self.hand_presence_threshold:
-                if scroll_command is not None:
-                    print(f"Sending scroll command: {scroll_command}")
-                    send_scroll_command = True
-                if zoom_command is not None and zoom_command.scale > 0.15:
-                    print(f"Sending zoom command: {zoom_command}")
-                    send_zoom_command = True
-        else:
-            self.hand_start_time = None
+        if scroll_command is not None:
+            print(f"Sending scroll command: {scroll_command}")
+            send_scroll_command = True
+        if zoom_command is not None and zoom_command.scale > 0.15:
+            print(f"Sending zoom command: {zoom_command}")
+            send_zoom_command = True
 
         cv2.imshow("frame", frame)
         self.notify_observers(scroll_command=scroll_command if send_scroll_command else None,

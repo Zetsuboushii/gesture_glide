@@ -4,6 +4,10 @@ from gesture_glide.config import load_config
 from gesture_glide.engine_controller import EngineController
 from gesture_glide.gui import run_gui
 
+# TODO delete after testing Suppress the specific warning
+import warnings ; warnings.warn = lambda *args,**kwargs: None
+
+
 
 @click.command()
 def main():
