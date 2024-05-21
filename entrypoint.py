@@ -9,12 +9,12 @@ from gesture_glide.gui import run_gui
 def main():
     config = load_config()
     engine_controller = EngineController(config)
-    engine_controller.start()
+    engine_controller.run()
 
     run_gui(engine_controller)
 
     engine_controller.stop()
-
+    exit(0)
 
 if __name__ == '__main__':
     main()
