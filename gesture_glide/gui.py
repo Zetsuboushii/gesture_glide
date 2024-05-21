@@ -1,3 +1,4 @@
+import asyncio
 import threading
 from tkinter import Tk, Frame, StringVar
 from tkinter import ttk
@@ -18,10 +19,15 @@ def setup_gui(root: Tk, controller: EngineController):
             self.updating_image = False
 
         def update(self, observable, *args, **kwargs):
+            if controller.camera_handler.stop_event.is_set():
+                return
             nonlocal frame_rate
             fr_rate = kwargs.get('frame_rate')
             fr_rate = format(fr_rate, '.2f') if fr_rate is not None else None
-            frame_rate.set(f"{fr_rate}" or "N/A")
+            try:
+                frame_rate.set(f"{fr_rate}" or "N/A")
+            except RuntimeError:
+                return  # Main thread not available anymore
             image_frame = kwargs.get("scroll_overlay")
             if image_frame is not None:
                 self.latest_frame = image_frame
@@ -61,10 +67,10 @@ def setup_gui(root: Tk, controller: EngineController):
     ttk.Label(data_container, text="FPS").grid(column=0, row=0, sticky="W")
     ttk.Label(data_container, textvariable=frame_rate).grid(column=1, row=0, sticky="W")
 
-    ttk.Button(data_container, text="Start", command=lambda: controller.run()).grid(column=0, row=1,
-                                                                                    sticky="W")
-    ttk.Button(data_container, text="Stop", command=lambda: controller.stop()).grid(column=1, row=1,
-                                                                                    sticky="W")
+    ttk.Button(data_container, text="Start", command=lambda: run(controller)).grid(column=0, row=1,
+                                                                                   sticky="W")
+    ttk.Button(data_container, text="Stop", command=lambda: stop(controller)).grid(column=1, row=1,
+                                                                                   sticky="W")
     ttk.Button(data_container, text="Quit", command=lambda: exit_program(root, controller)).grid(
         column=2, row=1, sticky="W")
 
@@ -76,7 +82,14 @@ def setup_gui(root: Tk, controller: EngineController):
 def exit_program(root: Tk, controller: EngineController):
     controller.stop()
     root.destroy()
-    exit(0)
+
+
+def run(controller: EngineController):
+    controller.run()
+
+
+def stop(controller: EngineController):
+    controller.stop()
 
 
 def run_gui(controller: EngineController):

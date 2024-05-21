@@ -30,8 +30,12 @@ class CameraHandler(Observable):
         last_frame_time = start_time
         frame_rate = None
         while not self.stop_event.is_set():
-            print("unset")
-            success, frame = capture.read()
+            try:
+                success, frame = capture.read()
+            except cv2.error as e:
+                success = False
+            if not success:
+                continue # Recheck stop event in case thread is supposed to stop
             metadata = FrameMetadata(width=frame.shape[0], height=frame.shape[1])
             time_from_last_frame = time.time() - last_frame_time
             frame_rate = 1 / time_from_last_frame if time_from_last_frame > 0 else None
@@ -39,7 +43,7 @@ class CameraHandler(Observable):
             self.frame_count += 1
             last_frame_time = time.time()
             print("\rFPS:", frame_rate, end="")
-        print("set")
         seconds = time.time() - start_time
         print(f"\nRead {self.frame_count} frames in {seconds} ({frame_rate :.2f} fps).")
         capture.release()
+        cv2.destroyAllWindows()

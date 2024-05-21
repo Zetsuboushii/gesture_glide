@@ -1,3 +1,4 @@
+import time
 from threading import Thread, Event
 
 from gesture_glide.camera_handler import CameraHandler
@@ -26,10 +27,12 @@ class EngineController:
         self.running_thread = None
 
     def run(self):
-        self.running_thread = Thread(target=lambda: self.camera_handler.run())
+        self.running_thread = Thread(target=self.camera_handler.run)
         self.running_thread.start()
 
     def stop(self):
         self.camera_handler.stop_event.set()
         if self.running_thread is not None:
-            self.running_thread.join(1)
+            while self.running_thread.is_alive():
+                self.running_thread.join(1)
+                time.sleep(1)
