@@ -6,11 +6,14 @@ import cv2
 import mediapipe as mp
 
 from gesture_glide.camera_handler import FrameMetadata
-from gesture_glide.mp_wrapper import MPWrapper
+from gesture_glide.mp_wrapper import MPWrapper, HandMovementState, HandMovementType
 from gesture_glide.utils import Observer, Observable
 
 # TODO maybe change delta if needed
 DELTA_TIME = 0.5
+# TODO keep an eye on naming !
+INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_DISTANCE_THRESHOLD = 0.05
+
 
 class Handedness(enum.StrEnum):
     LEFT = "Left"
@@ -56,7 +59,6 @@ class HandMovementRecognizer(Observer, Observable):
         self.previous_y_center_right = None
         self.previous_thumb_index_distance = None
         self.hand_start_time = None
-        self.hand_presence_threshold = 2  # seconds
 
     def get_past_comparison_hand(self, hand_data_array):
         return next(x.results for x in hand_data_array if x.time > time.time() - DELTA_TIME)
@@ -69,14 +71,60 @@ class HandMovementRecognizer(Observer, Observable):
         return None
 
     def get_euclidean_distance(self, a, b):
-        return math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
+        return math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2)
+
+    def determine_hand_movement_state(self, hand_data_array, hand_landmarks_right, hand_landmarks_left,
+                                      previous_hand_landmarks_right, previous_hand_landmarks_left, height):
+        distance_threshold = INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_DISTANCE_THRESHOLD * height
+
+        current_hand_data = hand_data_array[-1]
+        previous_hand_data = hand_data_array[-2]
+
+        current_wrist_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
+        current_wrist_left = hand_landmarks_left.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
+
+        previous_wrist_right = previous_hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
+        previous_wrist_left = previous_hand_landmarks_left.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
+
+        euclidean_distance_right = self.get_euclidean_distance(current_wrist_right, previous_wrist_right)
+        euclidean_distance_left = self.get_euclidean_distance(current_wrist_left, previous_wrist_left)
+
+        left_hand_movement, right_hand_movement = False, False
+
+        if euclidean_distance_right > distance_threshold:
+            right_hand_movement = True
+        if euclidean_distance_left > distance_threshold:
+            left_hand_movement = True
+
+        match previous_hand_data.hand_movement_state:
+            case HandMovementState.NO_MOVEMENT:
+                if left_hand_movement or right_hand_movement:
+                    current_hand_data.hand_movement_state = HandMovementState.MOVEMENT_BEGIN
+                if right_hand_movement and not left_hand_movement:
+                    current_hand_data.hand_movement_type = HandMovementType.SCROLLING
+                if left_hand_movement and right_hand_movement:
+                    current_hand_data.hand_movement_type = HandMovementType.ZOOMING
+            case HandMovementState.MOVEMENT_BEGIN:
+                if left_hand_movement or right_hand_movement:
+                    current_hand_data.hand_movement_state = HandMovementState.IN_MOVEMENT
+            case HandMovementState.IN_MOVEMENT:
+                if left_hand_movement or right_hand_movement:
+                    current_hand_data.hand_movement_state = HandMovementState.IN_MOVEMENT
+                else:
+                    current_hand_data.hand_movement_state = HandMovementState.MOVEMENT_END
+                    current_hand_data.hand_movement_type = HandMovementType.NONE
+            case HandMovementState.MOVEMENT_END:
+                # One frame a buffer before a new movement can begin
+                current_hand_data.hand_movement_state = HandMovementState.NO_MOVEMENT
+
+    # TODO check for MOVEMENT_END if yes -> calc distance between start and end and check HandMovementType,
+    #  then accordingly send recognized gesture and distance to observers
 
     def recognize_y_movement(self, previous_y, current_y, height) -> ScrollData | None:
         # Recognizes significant vertical hand movement for scrolling action
         movement_distance = abs(current_y - previous_y)
         # TODO maybe adjust threshold if needed
-        movement_threshold = 0.10 * height  # 10% of the frame height
-        # print(movement_distance, movement_threshold)
+        movement_threshold = 0.20 * height  # 20% of the frame height
         if movement_distance > movement_threshold:
             if current_y < previous_y:
                 return ScrollData(ScrollDirection.UP, movement_distance)
@@ -95,19 +143,17 @@ class HandMovementRecognizer(Observer, Observable):
 
     def update(self, observable, *args, **kwargs):
         metadata: FrameMetadata = kwargs["metadata"]
-        results = kwargs["hand_data_buffer"][-1].results
+        current_hand_data = kwargs["hand_data_buffer"][-1].results
         frame = kwargs["frame"]
         scroll_command: ScrollData | None = None
         zoom_command: ZoomData | None = None
 
-        hand_detected = False
         frame_height = metadata.height
 
-        hand_landmarks_right = self.get_hand_landmark(results, Handedness.RIGHT)
-        hand_landmarks_left = self.get_hand_landmark(results, Handedness.LEFT)
+        hand_landmarks_right = self.get_hand_landmark(current_hand_data, Handedness.RIGHT)
+        hand_landmarks_left = self.get_hand_landmark(current_hand_data, Handedness.LEFT)
 
         if hand_landmarks_right:
-            hand_detected = True
             wrist_y_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST].y
             previous_hand_landmarks = self.get_hand_landmark(
                 self.get_past_comparison_hand(kwargs["hand_data_buffer"]),

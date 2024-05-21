@@ -17,14 +17,26 @@ class HandMovementState(enum.Enum):
     MOVEMENT_END = 2
     IN_MOVEMENT = 3
 
+
+class HandMovementType(enum.Enum):
+    NONE = 0
+    SCROLLING = 1
+    ZOOMING = 2
+
+
 class FrameData:
     time: float
     results: Any
-    hand_movement_state: HandMovementState | None
-    def __init__(self, time: float, results: Any, hand_movement_state: HandMovementState = None):
+    hand_movement_state: HandMovementState
+    hand_movement_type: HandMovementType
+
+    def __init__(self, time: float, results: Any, hand_movement_state: HandMovementState = None,
+                 hand_movement_type: HandMovementType = None):
         self.time = time
         self.results = results
         self.hand_movement_state = hand_movement_state
+        self.hand_movement_type = hand_movement_type
+
 
 class MPWrapper(Observer, Observable):
     def __init__(self, camera_handler: CameraHandler):

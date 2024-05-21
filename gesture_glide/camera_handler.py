@@ -42,7 +42,6 @@ class CameraHandler(Observable):
             self.notify_observers(frame=frame, metadata=metadata, frame_rate=frame_rate)
             self.frame_count += 1
             last_frame_time = time.time()
-            print("\rFPS:", frame_rate, end="")
         seconds = time.time() - start_time
         print(f"\nRead {self.frame_count} frames in {seconds} ({frame_rate :.2f} fps).")
         capture.release()
