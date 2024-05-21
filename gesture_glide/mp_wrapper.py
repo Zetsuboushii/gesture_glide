@@ -43,5 +43,6 @@ class MPWrapper(Observer, Observable):
             self.hand_data_buffer.pop(0)
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # TODO: Remove if appropriate
         # Multihand landmarks -> hand landmarks -> landmark[x, y, z]
+        # TODO: add frame rate from camera handler for hmr
         self.notify_observers(metadata=kwargs["metadata"], frame=frame,
                               hand_data_buffer=self.hand_data_buffer)

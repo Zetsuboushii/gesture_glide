@@ -147,7 +147,6 @@ class HandMovementRecognizer(Observer, Observable):
             print(f"Sending zoom command: {zoom_command}")
             send_zoom_command = True
 
-        cv2.imshow("frame", frame)
         self.notify_observers(scroll_command=scroll_command if send_scroll_command else None,
                               zoom_command=zoom_command if send_zoom_command else None,
                               scroll_overlay=frame,
