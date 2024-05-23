@@ -126,20 +126,14 @@ class HandMovementRecognizer(Observer, Observable):
         # TODO maybe adjust threshold if needed
         movement_threshold = 0.20 * height  # 20% of the frame height
         if movement_distance > movement_threshold:
-            if current_y < previous_y:
-                return ScrollData(ScrollDirection.UP, movement_distance)
-            else:
-                return ScrollData(ScrollDirection.DOWN, movement_distance)
+            return ScrollData(ScrollDirection.UP if current_y < previous_y else ScrollDirection.DOWN, movement_distance)
 
     def recognize_zoom_movement(self, previous_distance, current_distance) -> ZoomData | None:
         # Recognizes changes in the distance between thumb and index finger for zooming
         distance_change = abs(current_distance - previous_distance)
         zoom_threshold = 0.05  # Change this threshold as needed
         if distance_change > zoom_threshold:
-            if current_distance > previous_distance:
-                return ZoomData(False, distance_change)
-            else:
-                return ZoomData(True, distance_change)
+            return ZoomData(False if current_distance > previous_distance else True, distance_change)
 
     def update(self, observable, *args, **kwargs):
         metadata: FrameMetadata = kwargs["metadata"]
