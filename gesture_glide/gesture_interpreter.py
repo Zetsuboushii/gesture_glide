@@ -2,7 +2,6 @@ import logging
 
 from gesture_glide.config import Config
 from gesture_glide.mp_wrapper import MPWrapper
-from gesture_glide.recognized_gesture import RecognizedGesture, GestureType
 from gesture_glide.hand_movement_recognizer import HandMovementRecognizer
 from gesture_glide.shortcuts.generic_scroll_shortcut import GenericScrollShortcut
 from gesture_glide.utils import Observer
@@ -21,10 +20,3 @@ class GestureInterpreter(Observer):
         scroll_command = kwargs.get("scroll_command")
         if scroll_command is not None:
             self.scroll_shortcut.execute(**kwargs)
-
-    def get_shortcut_for_recognized_gesture(self, recognized_gesture: RecognizedGesture):
-        match recognized_gesture.type:
-            case GestureType.SCROLL:
-                return GenericScrollShortcut(self.config)
-            case _:
-                raise NotImplementedError()
