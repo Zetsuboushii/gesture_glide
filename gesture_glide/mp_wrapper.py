@@ -65,17 +65,3 @@ class MPWrapper(Observer, Observable):
                 for hand_landmarks in results.multi_hand_landmarks:
                     landmarks = [(lm.x, lm.y, lm.z) for lm in hand_landmarks.landmark]
                     self.recognition_callback(landmarks)
-
-    def process(self, frame):
-        frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
-        results = self.hands.process(frame)
-        return results
-
-    def draw_landmarks(self, image, hand_landmarks):
-        mp.solutions.drawing_utils.draw_landmarks(image, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS)
-
-    def set_capture_callback(self, callback: Callable[[List], None]):
-        self.capture_callback = callback
-
-    def set_recognition_callback(self, callback: Callable[[List], None]):
-        self.recognition_callback = callback

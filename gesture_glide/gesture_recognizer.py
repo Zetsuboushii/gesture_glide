@@ -2,40 +2,37 @@ import json
 import os
 from gesture_glide.mp_wrapper import MPWrapper
 from gesture_glide.config import Config
-from gesture_glide.gesture_interpreter import GestureInterpreter
-from gesture_glide.engine_controller import EngineController
-from gesture_glide.recognized_gesture import RecognizedGesture, GestureType
+from gesture_glide.utils import Observer, Observable
 
 
-class GestureRecognizer:
-    def __init__(self, mp_wrapper: MPWrapper):
-        self.config = Config()
+class GestureRecognizer(Observer, Observable):
+    def __init__(self, config: Config, mp_wrapper: MPWrapper):
+        super().__init__()
+        self.config = config
         self.mp_wrapper = mp_wrapper
-        self.gesture_interpreter = GestureInterpreter(self.config, self.mp_wrapper)
-        self.engine_controller = EngineController(self.config)
+        mp_wrapper.add_observer(self)
 
-    def recognize_gesture(self):
         if os.path.exists('gesture_config.json'):
             with open('gesture_config.json', 'r') as file:
                 try:
-                    gesture_data = json.load(file)
+                    self.gesture_data = json.load(file)
                 except json.JSONDecodeError:
-                    gesture_data = {}
+                    self.gesture_data = {}
         else:
-            gesture_data = {}
+            self.gesture_data = {}
 
+    def recognize_gesture(self):
         def recognition_callback(current_landmarks):
-            for gesture_name, stored_landmarks in gesture_data.items():
+            for gesture_name, stored_landmarks in self.gesture_data.items():
                 if self.compare_landmarks(current_landmarks, stored_landmarks):
                     print(f"Erkannte Geste: {gesture_name}")
-                    recognized_gesture = RecognizedGesture(GestureType(gesture_name), {})
-                    shortcut = self.gesture_interpreter.get_shortcut_for_recognized_gesture(recognized_gesture)
-                    shortcut.execute()
                     break
-
-        self.mp_wrapper.set_recognition_callback(recognition_callback)
+        # TODO
+        # self.mp_wrapper.set_recognition_callback(recognition_callback)
         print("Recognition started. Press 'q' to quit")
-        self.engine_controller.run()
+
+    def update(self, observable, *args, **kwargs):
+        self.recognize_gesture()
 
     @staticmethod
     def compare_landmarks(current, stored, threshold=0.1):

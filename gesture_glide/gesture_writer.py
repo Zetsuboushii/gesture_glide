@@ -1,7 +1,7 @@
 import json
 import os
 
-
+# TODO Frames, etc. aus PoC übernehmen
 def save_gesture(gesture_name: str, landmarks: list):
     gesture_data = {gesture_name: landmarks}
     if os.path.exists("gesture_config.json"):

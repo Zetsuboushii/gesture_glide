@@ -1,4 +1,3 @@
-import asyncio
 import threading
 from tkinter import Tk, Frame, StringVar
 from tkinter import ttk
