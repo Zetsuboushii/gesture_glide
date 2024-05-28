@@ -32,8 +32,10 @@ class EngineController:
     def run(self):
         self.running_thread = Thread(target=self.camera_handler.run)
         self.running_thread.start()
+        self.gesture_interpreter.run()
 
     def stop(self):
+        self.gesture_interpreter.stop()
         self.camera_handler.stop_event.set()
         if self.running_thread is not None:
             while self.running_thread.is_alive():

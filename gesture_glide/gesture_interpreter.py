@@ -16,6 +16,12 @@ class GestureInterpreter(Observer):
         movement_recognizer.add_observer(self)
         self.scroll_shortcut = GenericScrollShortcut(config)
 
+    def run(self):
+        self.scroll_shortcut.run()
+
+    def stop(self):
+        self.scroll_shortcut.stop()
+
     def update(self, observable, *args, **kwargs):
         scroll_command = kwargs.get("scroll_command")
         if scroll_command is not None:
