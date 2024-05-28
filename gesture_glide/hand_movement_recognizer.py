@@ -57,11 +57,12 @@ class HandMovementRecognizer(Observer, Observable):
         self.mp_wrapper = mp_wrapper
         self.mp_wrapper.add_observer(self)
         self.previous_y_center_right = None
-        self.previous_thumb_index_distance = None
-        self.hand_start_time = None
 
     def get_past_comparison_hand(self, hand_data_array):
-        return next(x.results for x in hand_data_array if x.time > time.time() - DELTA_TIME)
+        try:
+            return next(x.results for x in hand_data_array if x.time > time.time() - DELTA_TIME)
+        except StopIteration:
+            return None
 
     def get_hand_landmark(self, hands, target_handedness: Handedness):
         if hands.multi_hand_landmarks:
@@ -110,8 +111,6 @@ class HandMovementRecognizer(Observer, Observable):
                     current_hand_data.hand_movement_state = HandMovementState.NO_MOVEMENT
                 if right_hand_movement and not left_hand_movement:
                     current_hand_data.hand_movement_type = HandMovementType.SCROLLING
-                if left_hand_movement and right_hand_movement:
-                    current_hand_data.hand_movement_type = HandMovementType.ZOOMING
             case HandMovementState.MOVEMENT_BEGIN:
                 if left_hand_movement or right_hand_movement:
                     current_hand_data.hand_movement_state = HandMovementState.IN_MOVEMENT
@@ -138,14 +137,7 @@ class HandMovementRecognizer(Observer, Observable):
         if movement_distance > movement_threshold:
             return ScrollData(ScrollDirection.UP if current_y < previous_y else ScrollDirection.DOWN, movement_distance)
 
-    def recognize_zoom_movement(self, previous_distance, current_distance) -> ZoomData | None:
-        # Recognizes changes in the distance between thumb and index finger for zooming
-        distance_change = abs(current_distance - previous_distance)
-        zoom_threshold = 0.05  # Change this threshold as needed
-        if distance_change > zoom_threshold:
-            return ZoomData(False if current_distance > previous_distance else True, distance_change)
-
-    def calculate_movement_command(self, frame_height, hand_landmarks_right, kwargs, scroll_command, zoom_command):
+    def calculate_movement_command(self, frame_height, hand_landmarks_right, kwargs, scroll_command):
         if hand_landmarks_right:
             wrist_y_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST].y
             previous_hand_landmarks = self.get_hand_landmark(
@@ -161,62 +153,71 @@ class HandMovementRecognizer(Observer, Observable):
                 scroll_command = self.recognize_y_movement(previous_wrist_y, wrist_y_right * frame_height,
                                                            frame_height)
 
-            thumb_tip = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.THUMB_TIP]
-            index_tip = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.INDEX_FINGER_TIP]
-            current_thumb_index_distance = self.get_euclidean_distance(thumb_tip, index_tip)
-
-            # TODO change to work with frame array like scrolling
-            if self.previous_thumb_index_distance is not None:
-                zoom_command = self.recognize_zoom_movement(self.previous_thumb_index_distance,
-                                                            current_thumb_index_distance)
-
-            self.previous_thumb_index_distance = current_thumb_index_distance
-        return scroll_command, zoom_command
+        return scroll_command
 
     def update(self, observable, *args, **kwargs):
         metadata: FrameMetadata = kwargs["metadata"]
         hand_data_buffer = kwargs["hand_data_buffer"]
         scroll_command: ScrollData | None = None
-        zoom_command: ZoomData | None = None
         frame = kwargs["frame"]
         frame_height = metadata.height
         hand_landmarks_left, hand_landmarks_right = None, None
 
-        # if only one frame is stored don't do anything
+        # If only one frame is stored don't do anything
         if not len(hand_data_buffer) < 2:
             current_hand_data = hand_data_buffer[-1].results
             previous_hand_data = hand_data_buffer[-2].results
 
+            current_time = hand_data_buffer[-1].time
+            previous_time = hand_data_buffer[-2].time
+            time_between_frames = current_time - previous_time
+
             hand_landmarks_right = self.get_hand_landmark(current_hand_data, Handedness.RIGHT)
             hand_landmarks_left = self.get_hand_landmark(current_hand_data, Handedness.LEFT)
             previous_hand_landmarks_right = self.get_hand_landmark(previous_hand_data, Handedness.RIGHT)
-            previous_hand_landmarks_left = self.get_hand_landmark(previous_hand_data, Handedness.RIGHT)
+            previous_hand_landmarks_left = self.get_hand_landmark(previous_hand_data, Handedness.LEFT)
+
+            right_distance_str = ""
+            left_distance_str = ""
 
             if hand_landmarks_right or hand_landmarks_left:
                 self.determine_hand_movement_state(hand_data_buffer, hand_landmarks_right, hand_landmarks_left,
-                                                   previous_hand_landmarks_right, previous_hand_landmarks_left,
-                                                   frame_height)
-                print(hand_data_buffer[-1].hand_movement_state, hand_data_buffer[-1].hand_movement_type)
+                                               previous_hand_landmarks_right, previous_hand_landmarks_left,
+                                               frame_height)
+                # print(hand_data_buffer[-1].hand_movement_state, hand_data_buffer[-1].hand_movement_type)
 
-                scroll_command, zoom_command = self.calculate_movement_command(frame_height, hand_landmarks_right,
-                                                                               kwargs,
-                                                                               scroll_command, zoom_command)
+                scroll_command = self.calculate_movement_command(frame_height, hand_landmarks_right,
+                                                             kwargs,
+                                                             scroll_command)
+
+                if hand_landmarks_right and previous_hand_landmarks_right:
+                    current_wrist_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
+                    previous_wrist_right = previous_hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
+                    euclidean_distance_right = self.get_euclidean_distance(current_wrist_right, previous_wrist_right)
+                    right_distance_str = f"Right Distance: {euclidean_distance_right:.2f}"
+
+                if hand_landmarks_left and previous_hand_landmarks_left:
+                    current_wrist_left = hand_landmarks_left.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
+                    previous_wrist_left = previous_hand_landmarks_left.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
+                    euclidean_distance_left = self.get_euclidean_distance(current_wrist_left, previous_wrist_left)
+                    left_distance_str = f"Left Distance: {euclidean_distance_left:.2f}"
+
+                print(f"time between frames: {time_between_frames:.2f}", end=" ")
+                if right_distance_str:
+                    print(right_distance_str, end=" ")
+                if left_distance_str:
+                    print(left_distance_str, end=" ")
+                print()
 
         mp.solutions.drawing_utils.draw_landmarks(frame, hand_landmarks_right,
-                                                  self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
+                                              self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
         mp.solutions.drawing_utils.draw_landmarks(frame, hand_landmarks_left,
-                                                  self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
+                                              self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
 
         send_scroll_command = False
-        send_zoom_command = False
         if scroll_command is not None:
             print(f"Sending scroll command: {scroll_command}")
             send_scroll_command = True
-        if zoom_command is not None and zoom_command.scale > 0.15:
-            print(f"Sending zoom command: {zoom_command}")
-            send_zoom_command = True
 
         self.notify_observers(scroll_command=scroll_command if send_scroll_command else None,
-                              zoom_command=zoom_command if send_zoom_command else None,
-                              scroll_overlay=frame,
-                              zoom_overlay=frame)
+                          scroll_overlay=frame)
