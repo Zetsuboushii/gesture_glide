@@ -29,13 +29,17 @@ class FrameData:
     results: Any
     hand_movement_state: HandMovementState
     hand_movement_type: HandMovementType
+    left_hand_spread: float | None
+    right_hand_spread: float | None
 
     def __init__(self, time: float, results: Any, hand_movement_state: HandMovementState = None,
-                 hand_movement_type: HandMovementType = None):
+                 hand_movement_type: HandMovementType = None, left_hand_spread: float | None = None, right_hand_spread: float | None = None):
         self.time = time
         self.results = results
         self.hand_movement_state = hand_movement_state
         self.hand_movement_type = hand_movement_type
+        self.left_hand_spread = left_hand_spread
+        self.right_hand_spread = right_hand_spread
 
 
 class MPWrapper(Observer, Observable):
