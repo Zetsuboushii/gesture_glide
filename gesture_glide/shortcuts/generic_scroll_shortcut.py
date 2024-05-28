@@ -38,7 +38,7 @@ class GenericScrollShortcut(ApplicationShortcut):
                 if self.scroll_data is not None:
                     self.scroll_action(self.scroll_data)
                     self.scroll_data = None
-                time.sleep(0.1)
+            time.sleep(0.1)
 
     def scroll_action(self, command: ScrollData):
         # Simulates mouse wheel actions based on detected hand movement direction
