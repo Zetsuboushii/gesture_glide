@@ -9,11 +9,11 @@ class GestureRecognizer(Observer, Observable):
     def __init__(self, config: Config, mp_wrapper: MPWrapper):
         super().__init__()
         self.config = config
-        self.mp_wrapper = mp_wrapper
         mp_wrapper.add_observer(self)
 
-        if os.path.exists('gesture_config.json'):
-            with open('gesture_config.json', 'r') as file:
+        config_path = 'gestures.json'
+        if os.path.exists(config_path):
+            with open(config_path, 'r') as file:
                 try:
                     self.gesture_data = json.load(file)
                 except json.JSONDecodeError:
@@ -21,18 +21,16 @@ class GestureRecognizer(Observer, Observable):
         else:
             self.gesture_data = {}
 
-    def recognize_gesture(self):
-        def recognition_callback(current_landmarks):
-            for gesture_name, stored_landmarks in self.gesture_data.items():
-                if self.compare_landmarks(current_landmarks, stored_landmarks):
-                    print(f"Erkannte Geste: {gesture_name}")
-                    break
-        # TODO
-        # self.mp_wrapper.set_recognition_callback(recognition_callback)
-        print("Recognition started. Press 'q' to quit")
+    def recognize_gesture(self, current_landmarks):
+        for gesture_name, stored_landmarks in self.gesture_data.items():
+            if self.compare_landmarks(current_landmarks, stored_landmarks):
+                print(f"Erkannte Geste: {gesture_name}")
+                break
 
     def update(self, observable, *args, **kwargs):
-        self.recognize_gesture()
+        current_landmarks = kwargs["results"].multi_hand_landmarks
+        if current_landmarks is not None:
+            self.recognize_gesture(current_landmarks)
 
     @staticmethod
     def compare_landmarks(current, stored, threshold=0.1):

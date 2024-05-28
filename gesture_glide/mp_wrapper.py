@@ -53,6 +53,9 @@ class MPWrapper(Observer, Observable):
         self.hand_data_buffer.append(FrameData(time.time(), results))
         if len(self.hand_data_buffer) > HAND_DATA_BUFFER - 1:
             self.hand_data_buffer.pop(0)
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # TODO: Remove if appropriate
+        self.notify_observers(metadata=kwargs["metadata"], results=results, frame=frame,
+                              hand_data_buffer=self.hand_data_buffer)
 
         if self.capture_callback and cv2.waitKey(1) & 0xFF == ord('s'):
             if results.multi_hand_landmarks:

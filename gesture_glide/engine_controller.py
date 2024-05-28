@@ -4,6 +4,7 @@ from threading import Thread, Event
 from gesture_glide.camera_handler import CameraHandler
 from gesture_glide.config import Config
 from gesture_glide.gesture_interpreter import GestureInterpreter
+from gesture_glide.gesture_recognizer import GestureRecognizer
 from gesture_glide.mp_wrapper import MPWrapper
 from gesture_glide.hand_movement_recognizer import HandMovementRecognizer
 
@@ -14,6 +15,7 @@ class EngineController:
     mp_wrapper: MPWrapper
     scroll_recognizer: HandMovementRecognizer
     gesture_interpreter: GestureInterpreter
+    gesture_recognizer: GestureRecognizer
     running_thread: Thread | None
 
     def __init__(self, config: Config):
@@ -22,6 +24,7 @@ class EngineController:
         self.camera_handler = CameraHandler()
         self.mp_wrapper = MPWrapper(self.camera_handler)
         self.scroll_recognizer = HandMovementRecognizer(self.mp_wrapper)
+        self.gesture_recognizer = GestureRecognizer(config, self.mp_wrapper)
         self.gesture_interpreter = GestureInterpreter(self.config, self.mp_wrapper,
                                                       self.scroll_recognizer)
         self.running_thread = None
