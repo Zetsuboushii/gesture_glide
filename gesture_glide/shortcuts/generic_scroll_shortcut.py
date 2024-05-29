@@ -1,4 +1,4 @@
-from gesture_glide.hand_movement_recognizer import ScrollData
+from gesture_glide.utils import ScrollData
 from gesture_glide.shortcuts.application_shortcut import ApplicationShortcut
 
 
