@@ -1,3 +1,5 @@
+import sys
+
 import click
 
 from gesture_glide.config import load_config
@@ -18,7 +20,7 @@ def main():
     run_gui(engine_controller)
 
     engine_controller.stop()
-    exit(0)
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()
