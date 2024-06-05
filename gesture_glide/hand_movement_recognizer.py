@@ -22,6 +22,8 @@ class HandMovementRecognizer(Observer, Observable):
         self.mp_wrapper = mp_wrapper
         self.mp_wrapper.add_observer(self)
         self.previous_y_center_right = None
+        self.last_valid_right_hand_frame_data = None
+        self.last_valid_left_hand_frame_data = None
 
     def get_past_comparison_hand(self, hand_data_array):
         try:
@@ -182,15 +184,22 @@ class HandMovementRecognizer(Observer, Observable):
         time_between_frames = current_time - previous_time
 
         hand_landmarks_right = self.get_hand_landmark(current_hand_data, Handedness.RIGHT)
+        if hand_landmarks_right:
+            self.last_valid_right_hand_frame_data = hand_data_buffer[-1]
         hand_landmarks_left = self.get_hand_landmark(current_hand_data, Handedness.LEFT)
+        if hand_landmarks_left:
+            self.last_valid_left_hand_frame_data = hand_data_buffer[-1]
         previous_hand_landmarks_right = self.get_hand_landmark(previous_hand_data, Handedness.RIGHT)
         previous_hand_landmarks_left = self.get_hand_landmark(previous_hand_data, Handedness.LEFT)
 
         right_distance_str = ""
         left_distance_str = ""
 
-        hand_data_buffer[-1].left_hand_movement_data = HandMovementData(Handedness.LEFT, HandMovementState.NO_MOVEMENT, None, None, None)
-        hand_data_buffer[-1].right_hand_movement_data = HandMovementData(Handedness.RIGHT, HandMovementState.NO_MOVEMENT, None, None, None)
+        hand_data_buffer[-1].left_hand_movement_data = HandMovementData(Handedness.LEFT, HandMovementState.NO_MOVEMENT,
+                                                                        None, None, None)
+        hand_data_buffer[-1].right_hand_movement_data = HandMovementData(Handedness.RIGHT,
+                                                                         HandMovementState.NO_MOVEMENT, None, None,
+                                                                         None)
 
         any_hand_detected = False
         if hand_landmarks_right is None:
@@ -251,7 +260,6 @@ class HandMovementRecognizer(Observer, Observable):
     def handle_empty_current_frame(self, hand_data_buffer: List[FrameData], handedness: Handedness):
         previous_movement_data = self.get_hand_movement_data(hand_data_buffer[-2], handedness)
         current_movement_data = self.get_hand_movement_data(hand_data_buffer[-1], handedness)
-
 
         if previous_movement_data is None:
             current_movement_data.hand_movement_state = HandMovementState.NO_MOVEMENT
