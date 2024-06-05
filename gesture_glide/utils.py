@@ -102,6 +102,7 @@ class FrameData:
     results: Any
     left_hand_movement_data: HandMovementData = None
     right_hand_movement_data: HandMovementData = None
+
     def __init__(self, time: float, results: Any, left_hand_movement_data: HandMovementData = None,
                  right_hand_movement_data: HandMovementData = None):
         self.time = time
@@ -116,6 +117,9 @@ class FrameData:
             return self.left_hand_movement_data is not None
         else:
             return self.right_hand_movement_data is not None
+
+    def get_hand_movement_data(self, handedness: Handedness) -> HandMovementData:
+        return self.left_hand_movement_data if handedness == Handedness.LEFT else self.right_hand_movement_data
 
 
 def get_last_valid_frame_data(hand_data_buffer: List[FrameData], counter: int, handedness: Handedness | None) -> FrameData | None:
