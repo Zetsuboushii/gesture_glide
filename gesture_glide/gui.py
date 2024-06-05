@@ -74,6 +74,9 @@ def setup_gui(root: Tk, controller: EngineController):
     ttk.Button(data_container, text="Quit", command=lambda: exit_program(root, controller)).grid(
         column=2, row=1, sticky="W")
 
+    ttk.Button(data_container, text="Capture", command=lambda: capture(controller)).grid(column=4, row=1,
+                                                                                         sticky="W")
+
     handler = DataHandler()
     controller.camera_handler.add_observer(handler)
     controller.mp_wrapper.add_observer(handler)
@@ -91,6 +94,10 @@ def run(controller: EngineController):
 
 def stop(controller: EngineController):
     controller.stop()
+
+
+def capture(controller: EngineController):
+    controller.capture()
 
 
 def run_gui(controller: EngineController):
