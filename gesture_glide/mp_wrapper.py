@@ -1,5 +1,6 @@
 import time
-from typing import List, Callable
+from typing import List, Any, Callable
+
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -17,12 +18,19 @@ class MPWrapper(Observer, Observable):
         camera_handler.add_observer(self)
         self.mp_hands = mp.solutions.hands
         self.hands = self.mp_hands.Hands()
-        # Save virtual first frame to kickstart logic
         self.hand_data_buffer: List[FrameData] = []
         self.capture_callback: Callable[[List], None] = None
         self.recognition_callback: Callable[[List], None] = None
+        self.last_frame_time = None
 
     def update(self, observable, *args, **kwargs):
+        now = time.time()
+        if self.last_frame_time is not None:
+            time_from_last_frame = now - self.last_frame_time
+            frame_rate = 1 / time_from_last_frame if time_from_last_frame > 0 else None
+        else:
+            frame_rate = None
+        self.last_frame_time = now
         frame = kwargs["frame"]
         frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
         results = self.hands.process(frame)
@@ -33,6 +41,7 @@ class MPWrapper(Observer, Observable):
             self.hand_data_buffer.pop(0)
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # TODO: Remove if appropriate
         self.notify_observers(metadata=kwargs["metadata"], results=results, frame=frame,
+                              frame_rate=frame_rate,
                               hand_data_buffer=self.hand_data_buffer)
 
         if self.capture_callback and cv2.waitKey(1) & 0xFF == ord('s'):

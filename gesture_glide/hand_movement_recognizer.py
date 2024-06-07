@@ -35,6 +35,13 @@ class HandMovementRecognizer(Observer, Observable):
         except StopIteration:
             return None
 
+    def get_hand_spread(self, landmarks: List[Landmark]) -> float | None:
+        if len(landmarks) < 2:
+            return None
+        combinations = [(a, b) for a in landmarks for b in landmarks if a != b]
+        return sum(abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z) for a, b in
+                   combinations)
+
     def get_hand_landmark(self, mp_results, target_handedness: Handedness) -> List[Landmark] | None:
         if mp_results.multi_hand_landmarks:
             for hand_landmarks, handedness in zip(mp_results.multi_hand_landmarks, mp_results.multi_handedness):
@@ -143,7 +150,7 @@ class HandMovementRecognizer(Observer, Observable):
                     if hand_movement_direction in {Directions.UP, Directions.DOWN}:
                         current_hand_data.hand_movement_type = HandMovementType.SCROLLING
                 else:
-                    current_hand_data.hand_movement_state = HandMovementState.MOVEMENT_END
+                    current_hand_data.hand_movement_state = HandMovementState.NO_MOVEMENT
             case HandMovementState.MOVEMENT_BEGIN:
                 if hand_movement_detected:
                     current_hand_data.hand_movement_state = HandMovementState.IN_MOVEMENT
@@ -229,6 +236,14 @@ class HandMovementRecognizer(Observer, Observable):
                                                                Handedness.RIGHT) if self.last_valid_right_hand_frame_data else None
         previous_hand_landmarks_left = self.get_hand_landmark(self.last_valid_left_hand_frame_data.results,
                                                               Handedness.LEFT) if self.last_valid_left_hand_frame_data else None
+
+        spread_right = self.get_hand_spread(
+            hand_landmarks_right.landmark) if hand_landmarks_right else None
+        spread_left = self.get_hand_spread(
+            hand_landmarks_left.landmark) if hand_landmarks_left else None
+        hand_data_buffer[-1].right_hand_spread = spread_right
+        hand_data_buffer[-1].left_hand_spread = spread_left
+        print(f"\rSpread: {spread_right}", end="", flush=True)
 
         right_distance_str = ""
         left_distance_str = ""
