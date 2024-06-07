@@ -14,6 +14,7 @@ from gesture_glide.utils import Observer, Observable, Handedness, ScrollDirectio
 DELTA_TIME = 0.5
 # TODO keep an eye on naming !
 INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD = 0.05
+SCROLL_COMMAND_SPEED_TRESHOLD = 0.25
 
 
 class HandMovementRecognizer(Observer, Observable):
@@ -137,7 +138,12 @@ class HandMovementRecognizer(Observer, Observable):
         # Current always contains valid hand data as handle_empty_current_frame_data() is called otherwise
         match previous_hand_data.hand_movement_state:
             case HandMovementState.NO_MOVEMENT:
-                current_hand_data.hand_movement_state = HandMovementState.MOVEMENT_BEGIN if hand_movement_detected else HandMovementState.NO_MOVEMENT
+                if hand_movement_detected:
+                    current_hand_data.hand_movement_state = HandMovementState.MOVEMENT_BEGIN
+                    if hand_movement_direction in {Directions.UP, Directions.DOWN}:
+                        current_hand_data.hand_movement_type = HandMovementType.SCROLLING
+                else:
+                    current_hand_data.hand_movement_state = HandMovementState.MOVEMENT_END
             case HandMovementState.MOVEMENT_BEGIN:
                 if hand_movement_detected:
                     current_hand_data.hand_movement_state = HandMovementState.IN_MOVEMENT
@@ -166,6 +172,7 @@ class HandMovementRecognizer(Observer, Observable):
                 current_hand_data.hand_movement_type = HandMovementType.NONE
             case state if state is None:
                 current_hand_data.hand_movement_state = HandMovementState.NO_MOVEMENT
+                current_hand_data.hand_movement_type = HandMovementType.NONE
 
     def get_hand_movement_data(self, frame_data: FrameData, handedness: Handedness) -> HandMovementData:
         """Get the movement data for the hand specified by `handedness` in the given frame"""
@@ -179,7 +186,11 @@ class HandMovementRecognizer(Observer, Observable):
         if movement_distance > movement_threshold:
             return ScrollData(ScrollDirection.UP if current_y < previous_y else ScrollDirection.DOWN, movement_distance)
 
-    def calculate_movement_command(self, frame_height, hand_landmarks_right, kwargs, scroll_command):
+    def calculate_movement_command(self, hand_data_buffer: List[FrameData], frame_height, hand_landmarks_right, kwargs, scroll_command):
+        current = hand_data_buffer[-1]
+        if current.right_hand_movement_data.hand_movement_type == HandMovementType.SCROLLING and current.right_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_TRESHOLD:
+            return ScrollData(ScrollDirection.UP if current.right_hand_movement_data.direction == Directions.UP else ScrollDirection.DOWN, current.right_hand_movement_data.speed)
+        return None
         if hand_landmarks_right:
             wrist_y_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST].y
             previous_hand_landmarks = self.get_hand_landmark(
@@ -250,7 +261,7 @@ class HandMovementRecognizer(Observer, Observable):
         movement_state_str_r = f"R: Movement State: {hand_data_buffer[-1].right_hand_movement_data.hand_movement_state.name}"
         movement_state_str_l = f"L: Movement State: {hand_data_buffer[-1].left_hand_movement_data.hand_movement_state.name}"
 
-        scroll_command = self.calculate_movement_command(frame_height, hand_landmarks_right,
+        scroll_command = self.calculate_movement_command(hand_data_buffer, frame_height, hand_landmarks_right,
                                                          kwargs,
                                                          scroll_command)
 
