@@ -15,6 +15,7 @@ DELTA_TIME = 0.5
 # TODO keep an eye on naming !
 INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD = 0.05
 SCROLL_COMMAND_SPEED_TRESHOLD = 0.25
+HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD = 0.15
 
 
 class HandMovementRecognizer(Observer, Observable):
@@ -96,9 +97,47 @@ class HandMovementRecognizer(Observer, Observable):
 
         self.apply_hand_movement_state_for_hand(left_hand_movement_detected, left_hand_movement_direction,
                                                 hand_data_array, Handedness.LEFT)
-
         self.apply_hand_movement_state_for_hand(right_hand_movement_detected, right_hand_movement_direction,
                                                 hand_data_array, Handedness.RIGHT)
+        self.apply_mono_hand_movement_state(hand_data_array)
+
+    def apply_mono_hand_movement_state(self, hand_data_buffer: List[FrameData]):
+        current_left = hand_data_buffer[-1].left_hand_movement_data
+        current_right = hand_data_buffer[-1].right_hand_movement_data
+        previous_movement = hand_data_buffer[-2].mono_hand_movement_data
+
+        if previous_movement is None or previous_movement.hand_movement_state == HandMovementState.NO_MOVEMENT:
+            hand_data_buffer[-1].mono_hand_movement_data = None
+            # Prioritize left hand
+            if current_left.hand_movement_state != HandMovementState.NO_MOVEMENT:
+                hand_data_buffer[-1].mono_hand_movement_data = current_left
+            elif current_right.hand_movement_state != HandMovementState.NO_MOVEMENT:
+                hand_data_buffer[-1].mono_hand_movement_data = current_right
+        else:
+            # TODO: Is it worth it to generalize this and make it unreadable in the process?
+            previous_left = self.get_hand_landmark(hand_data_buffer[-2].results, Handedness.LEFT)
+            previous_right = self.get_hand_landmark(hand_data_buffer[-2].results, Handedness.RIGHT)
+            current_left = self.get_hand_landmark(hand_data_buffer[-1].results, Handedness.LEFT)
+            current_right = self.get_hand_landmark(hand_data_buffer[-1].results, Handedness.RIGHT)
+
+            # 0 is wrists' index
+            previous_left_wrist = previous_left.landmark[0] if previous_left else None
+            previous_right_wrist = previous_right.landmark[0] if previous_right else None
+            current_left_wrist = current_left.landmark[0] if current_left else None
+            current_right_wrist = current_right.landmark[0] if current_right else None
+
+            if previous_left and current_left and self.get_euclidean_distance(previous_left_wrist, current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD: # left hand moving, no transfer
+                hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].left_hand_movement_data
+            elif previous_right and current_right and self.get_euclidean_distance(previous_right_wrist, current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD: # right hand moving, no transfer
+                hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].right_hand_movement_data
+            elif previous_left and current_right and self.get_euclidean_distance(previous_left_wrist, current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD: # Left to right transfer
+                hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].right_hand_movement_data
+            elif previous_right and current_left and self.get_euclidean_distance(previous_right_wrist, current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD: # Right to left transfer
+                hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].left_hand_movement_data
+            else:
+                hand_data_buffer[-1].mono_hand_movement_data = None
+
+
 
     # TODO: Better name
     def calculcate_movement_data_for_hand_with_fallback(self, previous_landmarks, current_landmarks, time_delta,
@@ -195,8 +234,10 @@ class HandMovementRecognizer(Observer, Observable):
 
     def calculate_movement_command(self, hand_data_buffer: List[FrameData], frame_height, hand_landmarks_right, kwargs, scroll_command):
         current = hand_data_buffer[-1]
-        if current.right_hand_movement_data.hand_movement_type == HandMovementType.SCROLLING and current.right_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_TRESHOLD:
-            return ScrollData(ScrollDirection.UP if current.right_hand_movement_data.direction == Directions.UP else ScrollDirection.DOWN, current.right_hand_movement_data.speed)
+        if current.mono_hand_movement_data is None:
+            return None
+        if current.mono_hand_movement_data.hand_movement_type == HandMovementType.SCROLLING and current.mono_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_TRESHOLD:
+            return ScrollData(ScrollDirection.UP if current.mono_hand_movement_data.direction == Directions.UP else ScrollDirection.DOWN, current.mono_hand_movement_data.speed)
         return None
         if hand_landmarks_right:
             wrist_y_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST].y
@@ -250,9 +291,9 @@ class HandMovementRecognizer(Observer, Observable):
 
         # Initialize with default values which will be overridden (by reference) later when determining the current frame's state
         hand_data_buffer[-1].left_hand_movement_data = HandMovementData(Handedness.LEFT, HandMovementState.NO_MOVEMENT,
-                                                                        None, None, None)
+                                                                        HandMovementType.NONE, None, None)
         hand_data_buffer[-1].right_hand_movement_data = HandMovementData(Handedness.RIGHT,
-                                                                         HandMovementState.NO_MOVEMENT, None, None,
+                                                                         HandMovementState.NO_MOVEMENT, HandMovementType.NONE, None,
                                                                          None)
 
         hand_detection_count = 2
@@ -273,8 +314,9 @@ class HandMovementRecognizer(Observer, Observable):
         if hand_landmarks_left:
             self.last_valid_left_hand_frame_data = hand_data_buffer[-1]
 
-        movement_state_str_r = f"R: Movement State: {hand_data_buffer[-1].right_hand_movement_data.hand_movement_state.name}"
-        movement_state_str_l = f"L: Movement State: {hand_data_buffer[-1].left_hand_movement_data.hand_movement_state.name}"
+        movement_state_str_r = f"R: {hand_data_buffer[-1].right_hand_movement_data.hand_movement_state.name}"
+        movement_state_str_l = f"L: {hand_data_buffer[-1].left_hand_movement_data.hand_movement_state.name}"
+        movement_state_str_m = f"M: {hand_data_buffer[-1].mono_hand_movement_data.hand_movement_state.name if hand_data_buffer[-1].mono_hand_movement_data else None}"
 
         scroll_command = self.calculate_movement_command(hand_data_buffer, frame_height, hand_landmarks_right,
                                                          kwargs,
@@ -288,6 +330,8 @@ class HandMovementRecognizer(Observer, Observable):
             print(movement_state_str_r, end=" ")
         if movement_state_str_l:
             print(movement_state_str_l, end=" ")
+        if movement_state_str_m:
+            print(movement_state_str_m, end=" ")
         if right_distance_str:
             print(right_distance_str, end=" ")
         if left_distance_str:

@@ -85,11 +85,11 @@ class HandMovementData:
     handedness: Handedness
     hand_movement_state: HandMovementState
     hand_movement_type: HandMovementType
-    speed: float
-    direction: Directions
+    speed: float | None
+    direction: Directions | None
 
     def __init__(self, handedness: Handedness, hand_movement_state: HandMovementState,
-                    hand_movement_type: HandMovementType, speed: float, direction: Directions):
+                    hand_movement_type: HandMovementType, speed: float | None, direction: Directions | None):
         self.handedness = handedness
         self.hand_movement_state = hand_movement_state
         self.hand_movement_type = hand_movement_type
@@ -102,13 +102,15 @@ class FrameData:
     results: Any
     left_hand_movement_data: HandMovementData = None
     right_hand_movement_data: HandMovementData = None
+    mono_hand_movement_data: HandMovementData | None = None
 
     def __init__(self, time: float, results: Any, left_hand_movement_data: HandMovementData = None,
-                 right_hand_movement_data: HandMovementData = None):
+                 right_hand_movement_data: HandMovementData = None, mono_hand_movement_data: HandMovementData = None):
         self.time = time
         self.results = results
         self.left_hand_movement_data = left_hand_movement_data
         self.right_hand_movement_data = right_hand_movement_data
+        self.mono_hand_movement_data = mono_hand_movement_data
 
     def has_hand_data(self, handedness: Handedness | None = None):
         if handedness is None:
