@@ -126,18 +126,20 @@ class HandMovementRecognizer(Observer, Observable):
             current_left_wrist = current_left.landmark[0] if current_left else None
             current_right_wrist = current_right.landmark[0] if current_right else None
 
-            if previous_left and current_left and self.get_euclidean_distance(previous_left_wrist, current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD: # left hand moving, no transfer
+            if previous_left and current_left and self.get_euclidean_distance(previous_left_wrist,
+                                                                              current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # left hand moving, no transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].left_hand_movement_data
-            elif previous_right and current_right and self.get_euclidean_distance(previous_right_wrist, current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD: # right hand moving, no transfer
+            elif previous_right and current_right and self.get_euclidean_distance(previous_right_wrist,
+                                                                                  current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # right hand moving, no transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].right_hand_movement_data
-            elif previous_left and current_right and self.get_euclidean_distance(previous_left_wrist, current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD: # Left to right transfer
+            elif previous_left and current_right and self.get_euclidean_distance(previous_left_wrist,
+                                                                                 current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # Left to right transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].right_hand_movement_data
-            elif previous_right and current_left and self.get_euclidean_distance(previous_right_wrist, current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD: # Right to left transfer
+            elif previous_right and current_left and self.get_euclidean_distance(previous_right_wrist,
+                                                                                 current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # Right to left transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].left_hand_movement_data
             else:
                 hand_data_buffer[-1].mono_hand_movement_data = None
-
-
 
     # TODO: Better name
     def calculcate_movement_data_for_hand_with_fallback(self, previous_landmarks, current_landmarks, time_delta,
@@ -232,12 +234,15 @@ class HandMovementRecognizer(Observer, Observable):
         if movement_distance > movement_threshold:
             return ScrollData(ScrollDirection.UP if current_y < previous_y else ScrollDirection.DOWN, movement_distance)
 
-    def calculate_movement_command(self, hand_data_buffer: List[FrameData], frame_height, hand_landmarks_right, kwargs, scroll_command):
+    def calculate_movement_command(self, hand_data_buffer: List[FrameData], frame_height, hand_landmarks_right, kwargs,
+                                   scroll_command):
         current = hand_data_buffer[-1]
         if current.mono_hand_movement_data is None:
             return None
         if current.mono_hand_movement_data.hand_movement_type == HandMovementType.SCROLLING and current.mono_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_TRESHOLD:
-            return ScrollData(ScrollDirection.UP if current.mono_hand_movement_data.direction == Directions.UP else ScrollDirection.DOWN, current.mono_hand_movement_data.speed)
+            return ScrollData(
+                ScrollDirection.UP if current.mono_hand_movement_data.direction == Directions.UP else ScrollDirection.DOWN,
+                current.mono_hand_movement_data.speed)
         return None
         if hand_landmarks_right:
             wrist_y_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST].y
@@ -293,7 +298,8 @@ class HandMovementRecognizer(Observer, Observable):
         hand_data_buffer[-1].left_hand_movement_data = HandMovementData(Handedness.LEFT, HandMovementState.NO_MOVEMENT,
                                                                         HandMovementType.NONE, None, None)
         hand_data_buffer[-1].right_hand_movement_data = HandMovementData(Handedness.RIGHT,
-                                                                         HandMovementState.NO_MOVEMENT, HandMovementType.NONE, None,
+                                                                         HandMovementState.NO_MOVEMENT,
+                                                                         HandMovementType.NONE, None,
                                                                          None)
 
         hand_detection_count = 2
