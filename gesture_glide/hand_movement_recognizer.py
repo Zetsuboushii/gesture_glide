@@ -226,16 +226,8 @@ class HandMovementRecognizer(Observer, Observable):
         """Get the movement data for the hand specified by `handedness` in the given frame"""
         return frame_data.left_hand_movement_data if handedness == Handedness.LEFT else frame_data.right_hand_movement_data
 
-    def recognize_y_movement(self, previous_y, current_y, height) -> ScrollData | None:
-        # Recognizes significant vertical hand movement for scrolling action
-        movement_distance = abs(current_y - previous_y)
-        # TODO maybe adjust threshold if needed
-        movement_threshold = 0.20 * height  # 20% of the frame height
-        if movement_distance > movement_threshold:
-            return ScrollData(ScrollDirection.UP if current_y < previous_y else ScrollDirection.DOWN, movement_distance)
 
-    def calculate_movement_command(self, hand_data_buffer: List[FrameData], frame_height, hand_landmarks_right, kwargs,
-                                   scroll_command):
+    def calculate_movement_command(self, hand_data_buffer: List[FrameData]):
         current = hand_data_buffer[-1]
         if current.mono_hand_movement_data is None:
             return None
@@ -261,6 +253,7 @@ class HandMovementRecognizer(Observer, Observable):
                 pass
 
         return scroll_command
+
 
     def update(self, observable, *args, **kwargs):
         metadata: FrameMetadata = kwargs["metadata"]
@@ -324,10 +317,7 @@ class HandMovementRecognizer(Observer, Observable):
         movement_state_str_l = f"L: {hand_data_buffer[-1].left_hand_movement_data.hand_movement_state.name}"
         movement_state_str_m = f"M: {hand_data_buffer[-1].mono_hand_movement_data.hand_movement_state.name if hand_data_buffer[-1].mono_hand_movement_data else None}"
 
-        scroll_command = self.calculate_movement_command(hand_data_buffer, frame_height, hand_landmarks_right,
-                                                         kwargs,
-                                                         scroll_command)
-
+        scroll_command = self.calculate_movement_command(hand_data_buffer)
         if time_between_frames_left:
             print(f"L-tbf: {time_between_frames_left:.3f}", end=" ")
         if time_between_frames_right:
@@ -357,6 +347,7 @@ class HandMovementRecognizer(Observer, Observable):
         self.notify_observers(scroll_command=scroll_command if send_scroll_command else None,
                               scroll_overlay=frame)
 
+
     def handle_empty_current_frame(self, hand_data_buffer: List[FrameData], handedness: Handedness):
         previous_movement_data = self.get_hand_movement_data(hand_data_buffer[-2], handedness)
         current_movement_data = self.get_hand_movement_data(hand_data_buffer[-1], handedness)
@@ -380,11 +371,11 @@ class HandMovementRecognizer(Observer, Observable):
                 else:
                     current_movement_data.hand_movement_state = HandMovementState.QUASI_END
 
-# TODO: Failsafe for mp detecting same hand as different handednesses alternately. Lock movement to first detected hand movement and interpret calculcated HandMovementData as just one hand per frame (the other one discarded).
-#   E.g.: Left hand movement; mediapipe loses it and interprets as right hand for a few frames -> treat MP right hand data as "real" left (maybe check if coordinates are not too far away/speed is similar)
+    # TODO: Failsafe for mp detecting same hand as different handednesses alternately. Lock movement to first detected hand movement and interpret calculcated HandMovementData as just one hand per frame (the other one discarded).
+    #   E.g.: Left hand movement; mediapipe loses it and interprets as right hand for a few frames -> treat MP right hand data as "real" left (maybe check if coordinates are not too far away/speed is similar)
 
-# TODO: Investigate phantom movement start and stop detections
+    # TODO: Investigate phantom movement start and stop detections
 
-# TODO: Send scroll command to observers if current state in [E, B, I, Q] (use speed and moving directions)
+    # TODO: Send scroll command to observers if current state in [E, B, I, Q] (use speed and moving directions)
 
-# TODO: Implement HandMovementType detection when/after determining state
+    # TODO: Implement HandMovementType detection when/after determining state

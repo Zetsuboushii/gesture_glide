@@ -42,16 +42,14 @@ class Directions(enum.Enum):
 
 class ScrollData:
     direction: ScrollDirection
-    distance: float
-    duration: float
+    speed: float
 
-    def __init__(self, direction: ScrollDirection, distance: float, duration: float = None):
+    def __init__(self, direction: ScrollDirection, speed: float = None):
         self.direction = direction
-        self.distance = distance
-        self.duration = duration if duration is not None else 1.
+        self.speed = speed
 
     def __str__(self):
-        return f"<ScrollData(direction={self.direction}, distance={self.distance}, duration={self.duration})>"
+        return f"<ScrollData(direction={self.direction},speed={self.speed})>"
 
 
 class ZoomData:
