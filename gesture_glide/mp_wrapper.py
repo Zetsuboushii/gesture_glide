@@ -1,45 +1,15 @@
-import enum
 import time
 from typing import List, Any, Callable
 
 import cv2
 import mediapipe as mp
+import numpy as np
+from mediapipe.python import solution_base
 
 from gesture_glide.camera_handler import CameraHandler
-from gesture_glide.utils import Observer, Observable
+from gesture_glide.utils import Observer, Observable, FrameData
 
 HAND_DATA_BUFFER = 20  # Frames
-
-
-class HandMovementState(enum.Enum):
-    NO_MOVEMENT = 0
-    MOVEMENT_BEGIN = 1
-    MOVEMENT_END = 2
-    IN_MOVEMENT = 3
-
-
-class HandMovementType(enum.Enum):
-    NONE = 0
-    SCROLLING = 1
-    ZOOMING = 2
-
-
-class FrameData:
-    time: float
-    results: Any
-    hand_movement_state: HandMovementState
-    hand_movement_type: HandMovementType
-    left_hand_spread: float | None
-    right_hand_spread: float | None
-
-    def __init__(self, time: float, results: Any, hand_movement_state: HandMovementState = None,
-                 hand_movement_type: HandMovementType = None, left_hand_spread: float | None = None, right_hand_spread: float | None = None):
-        self.time = time
-        self.results = results
-        self.hand_movement_state = hand_movement_state
-        self.hand_movement_type = hand_movement_type
-        self.left_hand_spread = left_hand_spread
-        self.right_hand_spread = right_hand_spread
 
 
 class MPWrapper(Observer, Observable):
@@ -65,7 +35,9 @@ class MPWrapper(Observer, Observable):
         frame = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
         results = self.hands.process(frame)
         self.hand_data_buffer.append(FrameData(time.time(), results))
-        if len(self.hand_data_buffer) > HAND_DATA_BUFFER - 1:
+        if len(self.hand_data_buffer) == 1:
+            self.hand_data_buffer.append(FrameData(time.time() + 0.001, results))
+        if len(self.hand_data_buffer) > HAND_DATA_BUFFER:
             self.hand_data_buffer.pop(0)
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # TODO: Remove if appropriate
         self.notify_observers(metadata=kwargs["metadata"], results=results, frame=frame,

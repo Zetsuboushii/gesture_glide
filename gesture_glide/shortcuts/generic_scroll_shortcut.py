@@ -1,3 +1,4 @@
+import math
 import time
 from threading import Event, Thread
 
@@ -44,6 +45,8 @@ class GenericScrollShortcut(ApplicationShortcut):
         # Simulates mouse wheel actions based on detected hand movement direction
         try:
             for _ in range(10):
-                self.pdf_window.wheel_mouse_input(wheel_dist=-command.direction.value)
+                base = 2
+                speed = math.ceil(1 if command.speed <= 0.4 else base ** (command.speed * 2))
+                self.pdf_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
         except Exception as e:
             print(e)
