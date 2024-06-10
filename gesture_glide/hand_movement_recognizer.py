@@ -15,9 +15,9 @@ from gesture_glide.utils import Observer, Observable, Handedness, ScrollDirectio
 DELTA_TIME = 0.5
 # TODO keep an eye on naming !
 INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD = 0.05
-SCROLL_COMMAND_SPEED_TRESHOLD = 0.25
-HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD = 0.15
-SCROLL_ENABLEMENT_SPREAD_DELTA_TRESHOLD = 20
+SCROLL_COMMAND_SPEED_THRESHOLD = 0.25
+HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD = 0.15
+SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD = 93
 
 
 class HandMovementRecognizer(Observer, Observable):
@@ -106,12 +106,28 @@ class HandMovementRecognizer(Observer, Observable):
         self.apply_hand_movement_state_for_hand(right_hand_movement_detected,
                                                 right_hand_movement_direction,
                                                 hand_data_buffer, Handedness.RIGHT)
+
+        spread_right = self.get_hand_spread(
+            hand_landmarks_right.landmark) if hand_landmarks_right else None
+        spread_left = self.get_hand_spread(
+            hand_landmarks_left.landmark) if hand_landmarks_left else None
+        hand_data_buffer[-1].right_hand_movement_data.spread = spread_right
+        hand_data_buffer[-1].left_hand_movement_data.spread = spread_left
+
         self.apply_mono_hand_movement_state(hand_data_buffer)
 
     def apply_mono_hand_movement_state(self, hand_data_buffer: List[FrameData]):
         current_left = hand_data_buffer[-1].left_hand_movement_data
         current_right = hand_data_buffer[-1].right_hand_movement_data
         previous_movement = hand_data_buffer[-2].mono_hand_movement_data
+
+        # TODO: better name
+        def did_start_scoll(spread_delta, direction: Directions):
+            threshold = -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-2].time)
+            print("Spread thresh:", threshold)
+            return spread_delta < threshold and direction in {
+                Directions.UP, Directions.DOWN}
+
 
         if previous_movement is None or previous_movement.hand_movement_state == HandMovementState.NO_MOVEMENT:
             hand_data_buffer[-1].mono_hand_movement_data = None
@@ -120,6 +136,7 @@ class HandMovementRecognizer(Observer, Observable):
                 hand_data_buffer[-1].mono_hand_movement_data = current_left
             elif current_right.hand_movement_state != HandMovementState.NO_MOVEMENT:
                 hand_data_buffer[-1].mono_hand_movement_data = current_right
+
         else:
             # TODO: Is it worth it to generalize this and make it unreadable in the process?
             previous_left = self.get_hand_landmark(hand_data_buffer[-2].results, Handedness.LEFT)
@@ -133,59 +150,38 @@ class HandMovementRecognizer(Observer, Observable):
             current_left_wrist = current_left.landmark[0] if current_left else None
             current_right_wrist = current_right.landmark[0] if current_right else None
 
-            spread_delta_left = hand_data_buffer[-1].left_spread - hand_data_buffer[
-                -2].mono_spread if \
-                hand_data_buffer[-1].left_spread is not None and hand_data_buffer[
-                    -2].mono_spread is not None else None
-            spread_delta_right = hand_data_buffer[-1].right_spread - hand_data_buffer[
-                -2].mono_spread if hand_data_buffer[-1].right_spread is not None and \
-                                   hand_data_buffer[-2].mono_spread is not None else None
-            print("Spread delta R: ", spread_delta_right, end="")
-
-            def did_start_scoll(spread_delta, direction: Directions):
-                return spread_delta < SCROLL_ENABLEMENT_SPREAD_DELTA_TRESHOLD and direction in {
-                    Directions.UP, Directions.DOWN} if spread_delta is not None else None
-
-            left_spread = hand_data_buffer[-1].left_spread
-            right_spread = hand_data_buffer[-1].right_spread
-
             if previous_left and current_left and self.get_euclidean_distance(previous_left_wrist,
-                                                                              current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # left hand moving, no transfer
+                                                                              current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # left hand moving, no transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[
                     -1].left_hand_movement_data
-                hand_data_buffer[-1].mono_spread = left_spread
             elif previous_right and current_right and self.get_euclidean_distance(
                     previous_right_wrist,
-                    current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # right hand moving, no transfer
+                    current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # right hand moving, no transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[
                     -1].right_hand_movement_data
-                hand_data_buffer[-1].mono_spread = right_spread
             elif previous_left and current_right and self.get_euclidean_distance(
                     previous_left_wrist,
-                    current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # Left to right transfer
+                    current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # Left to right transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[
                     -1].right_hand_movement_data
-                hand_data_buffer[-1].mono_spread = right_spread
             elif previous_right and current_left and self.get_euclidean_distance(
                     previous_right_wrist,
-                    current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # Right to left transfer
+                    current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # Right to left transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[
                     -1].left_hand_movement_data
-                hand_data_buffer[-1].mono_spread = left_spread
             else:
                 hand_data_buffer[-1].mono_hand_movement_data = None
-                hand_data_buffer[-1].mono_spread = None
 
-            if hand_data_buffer[-1].mono_hand_movement_data and did_start_scoll(spread_delta_left,
-                               hand_data_buffer[-1].mono_hand_movement_data.direction):
-                hand_data_buffer[
-                    -1].mono_hand_movement_data.hand_movement_type = HandMovementType.SCROLLING
-            elif hand_data_buffer[-1].mono_hand_movement_data and did_start_scoll(spread_delta_right,
-                                 hand_data_buffer[-1].mono_hand_movement_data.direction):
-                hand_data_buffer[
-                    -1].mono_hand_movement_data.hand_movement_type = HandMovementType.SCROLLING
-            elif hand_data_buffer[-1].mono_hand_movement_data is not None:
-                hand_data_buffer[-1].mono_hand_movement_data.hand_movement_type = HandMovementType.NONE
+        try:
+            spread_delta = hand_data_buffer[-1].mono_hand_movement_data.spread - hand_data_buffer[-2].mono_hand_movement_data.spread
+        except (AttributeError, TypeError): # movement data or spread None
+            spread_delta = None
+        print("Spread delta M: ", spread_delta, end="")
+
+        if hand_data_buffer[-1].mono_hand_movement_data is not None and spread_delta is not None:
+            if did_start_scoll(spread_delta, hand_data_buffer[-1].mono_hand_movement_data.direction):
+                hand_data_buffer[-1].mono_hand_movement_data.hand_movement_type = HandMovementType.SCROLLING
+
 
     # TODO: Better name
     def calculcate_movement_data_for_hand_with_fallback(self, previous_landmarks, current_landmarks,
@@ -232,23 +228,29 @@ class HandMovementRecognizer(Observer, Observable):
             return
 
         current_hand_data.hand_movement_type = previous_hand_data.hand_movement_type
+        spread_delta = current_hand_data.spread - previous_hand_data.spread if current_hand_data.spread is not None and previous_hand_data.spread is not None else None
+        hand_smaller = spread_delta < SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD if spread_delta is not None else False
         # Current always contains valid hand data as handle_empty_current_frame_data() is called otherwise
         match previous_hand_data.hand_movement_state:
             case HandMovementState.NO_MOVEMENT:
                 if hand_movement_detected:
                     current_hand_data.hand_movement_state = HandMovementState.MOVEMENT_BEGIN
-                    if hand_movement_direction in {Directions.UP, Directions.DOWN}:
+                    if hand_smaller and hand_movement_direction in {Directions.UP, Directions.DOWN}:
                         current_hand_data.hand_movement_type = HandMovementType.SCROLLING
                 else:
                     current_hand_data.hand_movement_state = HandMovementState.NO_MOVEMENT
             case HandMovementState.MOVEMENT_BEGIN:
                 if hand_movement_detected:
                     current_hand_data.hand_movement_state = HandMovementState.IN_MOVEMENT
+                    if hand_smaller:
+                        current_hand_data.hand_movement_type = HandMovementType.SCROLLING
                 else:
                     current_hand_data.hand_movement_state = HandMovementState.QUASI_END
             case HandMovementState.IN_MOVEMENT:
                 if hand_movement_detected:
                     current_hand_data.hand_movement_state = HandMovementState.IN_MOVEMENT
+                    if hand_smaller:
+                        current_hand_data.hand_movement_type = HandMovementType.SCROLLING
                 else:
                     current_hand_data.hand_movement_state = HandMovementState.QUASI_END
             case HandMovementState.QUASI_END:
@@ -309,13 +311,6 @@ class HandMovementRecognizer(Observer, Observable):
             self.last_valid_left_hand_frame_data.results,
             Handedness.LEFT) if self.last_valid_left_hand_frame_data else None
 
-        spread_right = self.get_hand_spread(
-            hand_landmarks_right.landmark) if hand_landmarks_right else None
-        spread_left = self.get_hand_spread(
-            hand_landmarks_left.landmark) if hand_landmarks_left else None
-        hand_data_buffer[-1].right_spread = spread_right
-        hand_data_buffer[-1].left_spread = spread_left
-        print(f"\rSpread: {spread_right}", end="", flush=True)
 
         right_distance_str = ""
         left_distance_str = ""
@@ -324,12 +319,12 @@ class HandMovementRecognizer(Observer, Observable):
         hand_data_buffer[-1].left_hand_movement_data = HandMovementData(Handedness.LEFT,
                                                                         HandMovementState.NO_MOVEMENT,
                                                                         HandMovementType.NONE, None,
-                                                                        None)
+                                                                        None, None)
         hand_data_buffer[-1].right_hand_movement_data = HandMovementData(Handedness.RIGHT,
                                                                          HandMovementState.NO_MOVEMENT,
                                                                          HandMovementType.NONE,
                                                                          None,
-                                                                         None)
+                                                                         None, None)
 
         self.determine_hand_movement_state(hand_data_buffer, time_between_frames_left,
                                            time_between_frames_right,
