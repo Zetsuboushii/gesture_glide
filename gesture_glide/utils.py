@@ -109,14 +109,20 @@ class FrameData:
     left_hand_movement_data: HandMovementData = None
     right_hand_movement_data: HandMovementData = None
     mono_hand_movement_data: HandMovementData | None = None
+    left_spread: float | None = None
+    right_spread: float | None = None
+    mono_spread: float | None = None
 
     def __init__(self, time: float, results: Any, left_hand_movement_data: HandMovementData = None,
-                 right_hand_movement_data: HandMovementData = None, mono_hand_movement_data: HandMovementData = None):
+                 right_hand_movement_data: HandMovementData = None, mono_hand_movement_data: HandMovementData = None, left_spread: float | None = None, right_spread: float | None = None):
         self.time = time
         self.results = results
         self.left_hand_movement_data = left_hand_movement_data
         self.right_hand_movement_data = right_hand_movement_data
         self.mono_hand_movement_data = mono_hand_movement_data
+        self.left_spread = left_spread
+        self.right_spread = right_spread
+        self.mono_spread = None
 
     def has_hand_data(self, handedness: Handedness | None = None):
         if handedness is None:
