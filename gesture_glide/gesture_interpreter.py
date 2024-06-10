@@ -1,5 +1,4 @@
 import time
-
 from gesture_glide.config import Config
 from gesture_glide.gesture_recognizer import GestureRecognizer
 from gesture_glide.hand_movement_recognizer import HandMovementRecognizer
@@ -32,15 +31,14 @@ class GestureInterpreter(Observer):
         self.scroll_shortcut.stop()
 
     def update(self, observable, *args, **kwargs):
-        if not self.should_process_new_gesture():
-            return
-
         scroll_command = kwargs.get("scroll_command")
         gesture = kwargs.get("recognized_gesture")
 
         if scroll_command is not None:
             self.process_scroll_command(**kwargs)
         elif gesture:
+            if not self.should_process_new_gesture():
+                return
             self.process_gesture(gesture)
 
     def should_process_new_gesture(self) -> bool:

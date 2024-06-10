@@ -47,6 +47,6 @@ class GenericScrollShortcut(ApplicationShortcut):
             for _ in range(10):
                 base = 2
                 speed = math.ceil(1 if command.speed <= 0.4 else base ** (command.speed * 2))
-                self.pdf_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
+                self.application_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
         except Exception as e:
             print(e)
