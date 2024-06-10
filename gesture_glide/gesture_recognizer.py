@@ -1,8 +1,10 @@
 import json
 import os
+import time
+
 from gesture_glide.mp_wrapper import MPWrapper
 from gesture_glide.config import Config
-from gesture_glide.utils import Observer, Observable
+from gesture_glide.utils import Observer, Observable, RecognizedGesture
 
 
 class GestureRecognizer(Observer, Observable):
@@ -27,6 +29,15 @@ class GestureRecognizer(Observer, Observable):
             normalized_stored = self.normalize_landmarks(stored_landmarks)
             if self.compare_landmarks(normalized_current, normalized_stored):
                 print(f"Erkannte Geste: {gesture_name}")
+                recognized_gesture = None
+                match gesture_name:
+                    case "knecht":
+                        recognized_gesture = RecognizedGesture.OPEN_ROULETTE
+                    case "knechtoman":
+                        recognized_gesture = RecognizedGesture.ROULETTE_PLUS
+                    case "knechtorino":
+                        recognized_gesture = RecognizedGesture.ROULETTE_MINUS
+                self.notify_observers(recognized_gesture=recognized_gesture)
                 break
 
     def update(self, observable, *args, **kwargs):
