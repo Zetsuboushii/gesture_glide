@@ -1,6 +1,8 @@
 import enum
 from typing import Any, List
 
+from pywinauto.keyboard import send_keys
+
 
 class Observable:
     def __init__(self):
@@ -144,3 +146,7 @@ def get_last_valid_frame_data(hand_data_buffer: List[FrameData], counter: int,
             frame_data = hand_data_buffer[i]
     except IndexError:
         return None
+
+
+def switch_to_previous_screen():
+    send_keys("%{TAB}")
