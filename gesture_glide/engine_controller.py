@@ -28,7 +28,7 @@ class EngineController:
         self.scroll_recognizer = HandMovementRecognizer(self.mp_wrapper)
         self.gesture_recognizer = GestureRecognizer(config, self.mp_wrapper)
         self.gesture_interpreter = GestureInterpreter(self.config, self.mp_wrapper,
-                                                      self.scroll_recognizer)
+                                                      self.scroll_recognizer,self.gesture_recognizer)
         self.gesture_writer = GestureWriter(self.config, self.mp_wrapper)
         self.running_thread = None
 
