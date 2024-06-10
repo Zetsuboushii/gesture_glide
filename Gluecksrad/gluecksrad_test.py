@@ -1,3 +1,5 @@
+import ctypes
+
 from pywinauto import Desktop
 from pywinauto.keyboard import send_keys
 import pywinauto.mouse
@@ -11,9 +13,20 @@ def spinRouelett(key: str):
         roulette.set_focus()
         # notepad.set_focus()
         send_keys(key)
+
     except Exception as e:
         print(e)
 
+def knecht():
+    for window in desktop.windows():
+        print(window.window_text(), dir(window))
+    active_window_handle = ctypes.windll.user32.GetForegroundWindow()
+
+    # Use pywinauto to get the window object
+    active_window = Desktop(backend="uia").window(handle=active_window_handle)
+
+    # Print the title of the active window
+    print("Currently focused window title:", active_window.window_text())
 
 
 def scroll():
@@ -29,11 +42,13 @@ def scroll():
         pdf.wheel_mouse_input(wheel_dist=100)
         time.sleep(5)
         send_keys("%{TAB}")
+        wheel_mouse_input(wheel_dist=100)
     except Exception as e:
         print(e)
         print("Kein PDF mit Acrobat geöffnet")
 
 
 desktop = Desktop(backend="uia")
-spinRouelett("{- down}"
-             "{- up}")
+# spinRouelett("{- down}"
+#              "{- up}")
+knecht()
