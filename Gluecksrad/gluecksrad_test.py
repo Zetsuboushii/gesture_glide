@@ -7,10 +7,13 @@ import time
 def spinRouelett(key: str):
     try:
         roulette = desktop.window(class_name="GlassWndClass-GlassWindowClass-2")
+        notepad = desktop.window(class_name="Notepad")
         roulette.set_focus()
+        # notepad.set_focus()
         send_keys(key)
-    except:
-        print("Glücksrad ist nicht offen, bitte öffne es und probiere es erneut")
+    except Exception as e:
+        print(e)
+
 
 
 def scroll():
@@ -32,4 +35,5 @@ def scroll():
 
 
 desktop = Desktop(backend="uia")
-spinRouelett("{space}")
+spinRouelett("{- down}"
+             "{- up}")
