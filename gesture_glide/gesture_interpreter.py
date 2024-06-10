@@ -2,13 +2,12 @@ import time
 
 from gesture_glide.config import Config
 from gesture_glide.gesture_recognizer import GestureRecognizer
-from gesture_glide.mp_wrapper import MPWrapper
 from gesture_glide.hand_movement_recognizer import HandMovementRecognizer
+from gesture_glide.mp_wrapper import MPWrapper
 from gesture_glide.shortcuts.generic_scroll_shortcut import GenericScrollShortcut
-from gesture_glide.shortcuts.roulette_open_shortcut import RouletteOpenShortcut
 from gesture_glide.shortcuts.roulette_command_shortcut import RouletteCommandShortcut
-from gesture_glide.utils import Observer, FrameData, HandMovementState, HandMovementType, RecognizedGesture, \
-    switch_to_previous_screen, GestureMode
+from gesture_glide.shortcuts.roulette_open_shortcut import RouletteOpenShortcut
+from gesture_glide.utils import Observer, RecognizedGesture, switch_to_previous_screen, GestureMode
 
 
 class GestureInterpreter(Observer):
