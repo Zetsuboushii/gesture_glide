@@ -46,7 +46,7 @@ class GestureRecognizer(Observer, Observable):
         return [(lm[0] - wrist[0], lm[1] - wrist[1], lm[2] - wrist[2]) for lm in landmarks]
 
     @staticmethod
-    def compare_landmarks(current, stored, threshold=0.1):
+    def compare_landmarks(current, stored, threshold=0.125):
         if len(current) != len(stored):
             # print(f"Landmark lengths differ: {len(current)} != {len(stored)}")
             return False

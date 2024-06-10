@@ -46,4 +46,4 @@ class EngineController:
                 time.sleep(1)
 
     def capture(self):
-        self.gesture_writer.capture_gesture("knecht")
+        self.gesture_writer.capture_gesture("spin to win")
