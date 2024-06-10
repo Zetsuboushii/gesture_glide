@@ -1,6 +1,4 @@
 import enum
-import logging
-from typing import List
 
 from gesture_glide.config import Config
 from gesture_glide.gesture_recognizer import GestureRecognizer
@@ -9,7 +7,8 @@ from gesture_glide.hand_movement_recognizer import HandMovementRecognizer
 from gesture_glide.shortcuts.generic_scroll_shortcut import GenericScrollShortcut
 from gesture_glide.shortcuts.roulette_open_shortcut import RouletteOpenShortcut
 from gesture_glide.shortcuts.roulette_command_shortcut import RouletteCommandShortcut
-from gesture_glide.utils import Observer, FrameData, HandMovementState, HandMovementType, RecognizedGesture
+from gesture_glide.utils import Observer, FrameData, HandMovementState, HandMovementType, RecognizedGesture, \
+    switch_to_previous_screen
 
 
 class GestureMode(enum.Enum):
@@ -56,11 +55,8 @@ class GestureInterpreter(Observer):
                     match gesture:
                         case RecognizedGesture.ROULETTE_PLUS:
                             self.roulette_command_shortcut.execute("+")
-                            raise NotImplementedError
                         case RecognizedGesture.ROULETTE_MINUS:
                             self.roulette_command_shortcut.execute("-")
-                            raise NotImplementedError
                         case RecognizedGesture.OPEN_ROULETTE:
-                            # TODO implement return to previous screen before roulette
+                            switch_to_previous_screen()
                             self.gesture_mode = GestureMode.NONE
-                            raise NotImplementedError

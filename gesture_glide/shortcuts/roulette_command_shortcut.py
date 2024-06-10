@@ -7,6 +7,6 @@ class RouletteCommandShortcut(ApplicationShortcut):
 
     def execute(self, key: str):
         try:
-            send_keys(key)
+            send_keys("{"+key+" down}{"+key+" up}")
         except Exception as e:
             logging.error(e)
