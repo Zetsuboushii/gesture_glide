@@ -45,12 +45,12 @@ class ApplicationShortcut:
             logging.info("Chromium not found.")
 
         try:
-            # Check for Chromium based windows
+            # Check for IntelliJ based windows
             intellij_window = self.desktop.window(class_name="SunAwtFrame")
             if intellij_window.exists():
                 return intellij_window
         except Exception as e:
-            logging.info("Chromium not found.")
+            logging.info("IntelliJ not found.")
 
         logging.warning("No supported application found.")
         return None
