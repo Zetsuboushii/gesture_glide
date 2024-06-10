@@ -14,8 +14,8 @@ from gesture_glide.utils import Observer, Observable, Handedness, ScrollDirectio
 DELTA_TIME = 0.5
 # TODO keep an eye on naming !
 INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD = 0.05
-SCROLL_COMMAND_SPEED_TRESHOLD = 0.25
-HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD = 0.15
+SCROLL_COMMAND_SPEED_THRESHOLD = 0.25
+HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD = 0.15
 
 
 class HandMovementRecognizer(Observer, Observable):
@@ -127,16 +127,16 @@ class HandMovementRecognizer(Observer, Observable):
             current_right_wrist = current_right.landmark[0] if current_right else None
 
             if previous_left and current_left and self.get_euclidean_distance(previous_left_wrist,
-                                                                              current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # left hand moving, no transfer
+                                                                              current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # left hand moving, no transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].left_hand_movement_data
             elif previous_right and current_right and self.get_euclidean_distance(previous_right_wrist,
-                                                                                  current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # right hand moving, no transfer
+                                                                                  current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # right hand moving, no transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].right_hand_movement_data
             elif previous_left and current_right and self.get_euclidean_distance(previous_left_wrist,
-                                                                                 current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # Left to right transfer
+                                                                                 current_right_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # Left to right transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].right_hand_movement_data
             elif previous_right and current_left and self.get_euclidean_distance(previous_right_wrist,
-                                                                                 current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_TRESHOLD:  # Right to left transfer
+                                                                                 current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # Right to left transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[-1].left_hand_movement_data
             else:
                 hand_data_buffer[-1].mono_hand_movement_data = None
@@ -226,34 +226,15 @@ class HandMovementRecognizer(Observer, Observable):
         """Get the movement data for the hand specified by `handedness` in the given frame"""
         return frame_data.left_hand_movement_data if handedness == Handedness.LEFT else frame_data.right_hand_movement_data
 
-
     def calculate_movement_command(self, hand_data_buffer: List[FrameData]):
         current = hand_data_buffer[-1]
         if current.mono_hand_movement_data is None:
             return None
-        if current.mono_hand_movement_data.hand_movement_type == HandMovementType.SCROLLING and current.mono_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_TRESHOLD:
+        if current.mono_hand_movement_data.hand_movement_type == HandMovementType.SCROLLING and current.mono_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_THRESHOLD:
             return ScrollData(
                 ScrollDirection.UP if current.mono_hand_movement_data.direction == Directions.UP else ScrollDirection.DOWN,
                 current.mono_hand_movement_data.speed)
         return None
-        if hand_landmarks_right:
-            wrist_y_right = hand_landmarks_right.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST].y
-            previous_hand_landmarks = self.get_hand_landmark(
-                self.get_past_comparison_hand(kwargs["hand_data_buffer"]),
-                Handedness.RIGHT)
-            if previous_hand_landmarks is not None:
-                previous_wrist_y = previous_hand_landmarks.landmark[
-                                       self.mp_wrapper.mp_hands.HandLandmark.WRIST].y * frame_height
-            else:
-                previous_wrist_y = None
-
-            if previous_wrist_y is not None:
-                # scroll_command = self.recognize_y_movement(previous_wrist_y, wrist_y_right * frame_height,
-                #                                            frame_height)
-                pass
-
-        return scroll_command
-
 
     def update(self, observable, *args, **kwargs):
         metadata: FrameMetadata = kwargs["metadata"]
@@ -347,7 +328,6 @@ class HandMovementRecognizer(Observer, Observable):
         self.notify_observers(scroll_command=scroll_command if send_scroll_command else None,
                               scroll_overlay=frame)
 
-
     def handle_empty_current_frame(self, hand_data_buffer: List[FrameData], handedness: Handedness):
         previous_movement_data = self.get_hand_movement_data(hand_data_buffer[-2], handedness)
         current_movement_data = self.get_hand_movement_data(hand_data_buffer[-1], handedness)
@@ -370,12 +350,3 @@ class HandMovementRecognizer(Observer, Observable):
                     current_movement_data.hand_movement_type = HandMovementType.NONE
                 else:
                     current_movement_data.hand_movement_state = HandMovementState.QUASI_END
-
-    # TODO: Failsafe for mp detecting same hand as different handednesses alternately. Lock movement to first detected hand movement and interpret calculcated HandMovementData as just one hand per frame (the other one discarded).
-    #   E.g.: Left hand movement; mediapipe loses it and interprets as right hand for a few frames -> treat MP right hand data as "real" left (maybe check if coordinates are not too far away/speed is similar)
-
-    # TODO: Investigate phantom movement start and stop detections
-
-    # TODO: Send scroll command to observers if current state in [E, B, I, Q] (use speed and moving directions)
-
-    # TODO: Implement HandMovementType detection when/after determining state

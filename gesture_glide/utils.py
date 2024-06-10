@@ -18,6 +18,7 @@ class Observable:
         for observer in self.observers:
             observer.update(self, *args, **kwargs)
 
+
 class Observer:
     def update(self, observable, *args, **kwargs):
         pass
@@ -38,6 +39,12 @@ class Directions(enum.Enum):
     DOWN = 1
     LEFT = 2
     RIGHT = 3
+
+
+class RecognizedGesture(enum.Enum):
+    OPEN_ROULETTE = 0
+    ROULETTE_PLUS = 1
+    ROULETTE_MINUS = 2
 
 
 class ScrollData:
@@ -79,7 +86,6 @@ class HandMovementType(enum.Enum):
 
 
 class HandMovementData:
-
     handedness: Handedness
     hand_movement_state: HandMovementState
     hand_movement_type: HandMovementType
@@ -87,7 +93,7 @@ class HandMovementData:
     direction: Directions | None
 
     def __init__(self, handedness: Handedness, hand_movement_state: HandMovementState,
-                    hand_movement_type: HandMovementType, speed: float | None, direction: Directions | None):
+                 hand_movement_type: HandMovementType, speed: float | None, direction: Directions | None):
         self.handedness = handedness
         self.hand_movement_state = hand_movement_state
         self.hand_movement_type = hand_movement_type
@@ -122,7 +128,8 @@ class FrameData:
         return self.left_hand_movement_data if handedness == Handedness.LEFT else self.right_hand_movement_data
 
 
-def get_last_valid_frame_data(hand_data_buffer: List[FrameData], counter: int, handedness: Handedness | None) -> FrameData | None:
+def get_last_valid_frame_data(hand_data_buffer: List[FrameData], counter: int,
+                              handedness: Handedness | None) -> FrameData | None:
     if len(hand_data_buffer) == 0:
         return None
     i = -1
@@ -137,5 +144,3 @@ def get_last_valid_frame_data(hand_data_buffer: List[FrameData], counter: int, h
             frame_data = hand_data_buffer[i]
     except IndexError:
         return None
-
-
