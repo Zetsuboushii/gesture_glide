@@ -31,11 +31,11 @@ class GestureRecognizer(Observer, Observable):
                 print(f"Erkannte Geste: {gesture_name}")
                 recognized_gesture = None
                 match gesture_name:
-                    case "knecht":
+                    case "OpenRoulette":
                         recognized_gesture = RecognizedGesture.OPEN_ROULETTE
-                    case "knechtoman":
+                    case "EnlargeRouletteField":
                         recognized_gesture = RecognizedGesture.ROULETTE_PLUS
-                    case "knechtorino":
+                    case "ReduceRouletteField":
                         recognized_gesture = RecognizedGesture.ROULETTE_MINUS
                 self.notify_observers(recognized_gesture=recognized_gesture)
                 break
