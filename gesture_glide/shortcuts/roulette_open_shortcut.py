@@ -6,7 +6,6 @@ class RouletteOpenShortcut(ApplicationShortcut):
     def execute(self):
         self.spin_roulette()
 
-
     def spin_roulette(self):
         try:
             roulette = self.desktop.window(class_name="GlassWndClass-GlassWindowClass-2")
