@@ -19,6 +19,7 @@ INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD = 0.10
 SCROLL_COMMAND_SPEED_THRESHOLD = 0.25
 HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD = 0.15 # Treshold for detecting that 2 hands transferred detected side (for mono hand)
 SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD = 93
+SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX = 4
 
 
 class HandMovementRecognizer(Observer, Observable):
@@ -124,7 +125,7 @@ class HandMovementRecognizer(Observer, Observable):
 
         # TODO: better name
         def did_start_scoll(spread_delta, direction: Directions):
-            threshold = -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-2].time)
+            threshold = -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time)
             logging.debug("Spread thresh:", threshold)
             return spread_delta < threshold and direction in {
                 Directions.UP, Directions.DOWN}
@@ -174,15 +175,15 @@ class HandMovementRecognizer(Observer, Observable):
                 hand_data_buffer[-1].mono_hand_movement_data = None
 
         try:
-            spread_delta = hand_data_buffer[-1].mono_hand_movement_data.spread - hand_data_buffer[-2].mono_hand_movement_data.spread
+            spread_delta = hand_data_buffer[-1].mono_hand_movement_data.spread - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].mono_hand_movement_data.spread
         except (AttributeError, TypeError): # movement data or spread None
             spread_delta = None
         logging.debug("Spread delta M: ", spread_delta, end="")
         #TODO delete print and if
         if hand_data_buffer[-1].mono_hand_movement_data is not None and hand_data_buffer[-1].mono_hand_movement_data.speed is not None and spread_delta is not None:
-            if hand_data_buffer[-1].mono_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_THRESHOLD and spread_delta < -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD:
-                print("Speed M: ",hand_data_buffer[-1].mono_hand_movement_data.speed, SCROLL_COMMAND_SPEED_THRESHOLD, end="")
-                print("Delta_Spread M: ",spread_delta, SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD)
+            if hand_data_buffer[-1].mono_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_THRESHOLD and spread_delta < -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time):
+                print("Speed M: ",hand_data_buffer[-1].mono_hand_movement_data.speed, SCROLL_COMMAND_SPEED_THRESHOLD, end=" ")
+                print("Delta_Spread M: ",spread_delta, - SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time))
 
 
 
