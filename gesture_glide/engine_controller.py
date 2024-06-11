@@ -32,8 +32,9 @@ class EngineController:
         self.gesture_writer = GestureWriter(self.config, self.mp_wrapper)
         self.running_thread = None
 
-    def apply_user_settings(self, speed_threshold_multiplier: float, spread_threshold_multiplier: float):
+    def apply_user_settings(self, speed_threshold_multiplier: float, spread_threshold_multiplier: float, scroll_speed_multiplier: float):
         self.scroll_recognizer.apply_user_settings(speed_threshold_multiplier, spread_threshold_multiplier)
+        self.gesture_interpreter.apply_user_settings(scroll_speed_multiplier)
 
     def run(self):
         self.running_thread = Thread(target=self.camera_handler.run)

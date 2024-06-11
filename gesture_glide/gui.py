@@ -5,7 +5,7 @@ import cv2
 from PIL import ImageTk, Image
 
 from gesture_glide.engine_controller import EngineController
-from gesture_glide.utils import Observer
+from gesture_glide.utils import Observer, GestureMode
 
 
 def setup_gui(root: Tk, controller: EngineController):
@@ -21,6 +21,7 @@ def setup_gui(root: Tk, controller: EngineController):
                 return
             nonlocal frame_rate
             fr_rate = kwargs.get('frame_rate')
+            mode: GestureMode | None = kwargs.get("gesture_mode")
             if fr_rate is not None:
                 fr_rate = format(fr_rate, '.2f') if fr_rate is not None else None
                 try:
@@ -33,6 +34,8 @@ def setup_gui(root: Tk, controller: EngineController):
                 if not self.updating_image:
                     self.updating_image = True
                     threading.Thread(target=self.update_image).start()
+            if mode is not None:
+                gesture_mode.set(mode.name)
 
         def update_image(self):
             while self.latest_frame is not None:
@@ -62,7 +65,15 @@ def setup_gui(root: Tk, controller: EngineController):
         if gesture_name_value:
             controller.capture(gesture_name_value)
 
+    def apply_user_settings():
+        controller.apply_user_settings(
+            spd_thrld_slider.get() / 100.0,
+            spread_thrld_slider.get() / 100.0,
+            scroll_speed_slider.get() / 100.0
+        )
+
     frame_rate = StringVar()
+    gesture_mode = StringVar()
     frame = Frame(root, width=500, height=500)
     frame.grid()
     data_container = Frame(frame, width=300)
@@ -73,20 +84,27 @@ def setup_gui(root: Tk, controller: EngineController):
     gesture_name_entry = Entry(data_container, textvariable=gesture_name)
     gesture_name_entry.grid(column=1, row=2, sticky="W")
 
-    SLIDER_WIDTH = 300
-
     settings = Frame(frame, width=600)
     settings.grid()
     ttk.Label(settings, text="Speed threshold").grid(column=0, row=0, sticky="W")
     spd_thrld_slider = Scale(settings, from_=0, to=200, orient=HORIZONTAL)
+    spd_thrld_slider.set(100)
     spd_thrld_slider.grid(column=1, row=0, sticky="W")
 
     ttk.Label(settings, text="Spread threshold").grid(column=0, row=1, sticky="W")
     spread_thrld_slider = Scale(settings, from_=0, to=200, orient=HORIZONTAL)
+    spread_thrld_slider.set(100)
     spread_thrld_slider.grid(column=1, row=1, sticky="W")
+
+    ttk.Label(settings, text="Scrolling speed").grid(column=0, row=2, sticky="W")
+    scroll_speed_slider = Scale(settings, from_=0, to=200, orient=HORIZONTAL)
+    scroll_speed_slider.set(100)
+    scroll_speed_slider.grid(column=1, row=2, sticky="W")
 
     ttk.Label(data_container, text="FPS").grid(column=0, row=0, sticky="W")
     ttk.Label(data_container, textvariable=frame_rate).grid(column=1, row=0, sticky="W")
+
+    ttk.Label(data_container, textvariable=gesture_mode).grid(column=2, row=0, sticky="W")
 
     ttk.Button(data_container, text="Start", command=lambda: run(controller)).grid(column=0, row=1, sticky="W")
     ttk.Button(data_container, text="Stop", command=lambda: stop(controller)).grid(column=1, row=1, sticky="W")
@@ -94,12 +112,13 @@ def setup_gui(root: Tk, controller: EngineController):
                                                                                                  sticky="W")
     ttk.Button(data_container, text="Capture", command=lambda: capture(controller, gesture_name)).grid(column=4, row=1,
                                                                                                        sticky="W")
-    ttk.Button(data_container, text="Apply", command=lambda: controller.apply_user_settings(spd_thrld_slider.get() / 100.0, spread_thrld_slider.get() / 100.0)).grid(column=5, row=1, sticky="W")
+    ttk.Button(data_container, text="Apply", command=apply_user_settings).grid(column=5, row=1, sticky="W")
 
     handler = DataHandler()
     controller.camera_handler.add_observer(handler)
     controller.mp_wrapper.add_observer(handler)
     controller.scroll_recognizer.add_observer(handler)
+    controller.gesture_interpreter.add_observer(handler)
 
 
 def exit_program(root: Tk, controller: EngineController):

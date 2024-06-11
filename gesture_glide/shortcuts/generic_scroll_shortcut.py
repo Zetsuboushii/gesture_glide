@@ -21,6 +21,7 @@ class GenericScrollShortcut(ApplicationShortcut):
         self.scrolling = Event()
         self.terminate = Event()
         self.scroll_data = None
+        self.scroll_speed_multiplier = 1.0
 
     def execute(self, **kwargs):
         scroll_command = kwargs["scroll_command"]
@@ -29,6 +30,9 @@ class GenericScrollShortcut(ApplicationShortcut):
             self.scrolling.set()
         else:
             self.scrolling.clear()
+
+    def apply_user_settings(self, scroll_speed_multiplier: float):
+        self.scroll_speed_multiplier = scroll_speed_multiplier
 
     def run(self):
         self.terminate.clear()
@@ -52,7 +56,7 @@ class GenericScrollShortcut(ApplicationShortcut):
         try:
             for _ in range(10):
                 base = 2
-                speed = math.ceil(1 if command.speed <= 0.4 else base ** (command.speed * 2))
+                speed = math.ceil((1 if command.speed <= 0.4 else base ** (command.speed * 2)) * self.scroll_speed_multiplier)
                 self.active_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
         except Exception as e:
             logging.debug(e)
