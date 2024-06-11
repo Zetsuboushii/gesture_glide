@@ -98,14 +98,16 @@ class HandMovementData:
     hand_movement_type: HandMovementType
     speed: float | None
     direction: Directions | None
+    spread: float | None
 
     def __init__(self, handedness: Handedness, hand_movement_state: HandMovementState,
-                 hand_movement_type: HandMovementType, speed: float | None, direction: Directions | None):
+                 hand_movement_type: HandMovementType, speed: float | None, direction: Directions | None, spread: float | None):
         self.handedness = handedness
         self.hand_movement_state = hand_movement_state
         self.hand_movement_type = hand_movement_type
         self.speed = speed
         self.direction = direction
+        self.spread = spread
 
 
 class FrameData:
