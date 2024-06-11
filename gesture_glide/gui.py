@@ -1,6 +1,5 @@
 import threading
-from tkinter import Tk, Frame, StringVar
-from tkinter import ttk
+from tkinter import Tk, Frame, StringVar, ttk, Entry
 
 import cv2
 from PIL import ImageTk, Image
@@ -58,24 +57,31 @@ def setup_gui(root: Tk, controller: EngineController):
             self.image_label.image = image_tk
             self.updating_image = False
 
+    def capture(controller: EngineController, gesture_name: StringVar):
+        gesture_name_value = gesture_name.get()
+        if gesture_name_value:
+            controller.capture(gesture_name_value)
+
     frame_rate = StringVar()
     frame = Frame(root, width=500, height=500)
     frame.grid()
     data_container = Frame(frame, width=300)
     data_container.grid(column=0, row=1, sticky="W")
 
+    gesture_name = StringVar()
+    ttk.Label(data_container, text="Gesture Name").grid(column=0, row=2, sticky="W")
+    gesture_name_entry = Entry(data_container, textvariable=gesture_name)
+    gesture_name_entry.grid(column=1, row=2, sticky="W")
+
     ttk.Label(data_container, text="FPS").grid(column=0, row=0, sticky="W")
     ttk.Label(data_container, textvariable=frame_rate).grid(column=1, row=0, sticky="W")
 
-    ttk.Button(data_container, text="Start", command=lambda: run(controller)).grid(column=0, row=1,
-                                                                                   sticky="W")
-    ttk.Button(data_container, text="Stop", command=lambda: stop(controller)).grid(column=1, row=1,
-                                                                                   sticky="W")
-    ttk.Button(data_container, text="Quit", command=lambda: exit_program(root, controller)).grid(
-        column=2, row=1, sticky="W")
-
-    ttk.Button(data_container, text="Capture", command=lambda: capture(controller)).grid(column=4, row=1,
-                                                                                         sticky="W")
+    ttk.Button(data_container, text="Start", command=lambda: run(controller)).grid(column=0, row=1, sticky="W")
+    ttk.Button(data_container, text="Stop", command=lambda: stop(controller)).grid(column=1, row=1, sticky="W")
+    ttk.Button(data_container, text="Quit", command=lambda: exit_program(root, controller)).grid(column=2, row=1,
+                                                                                                 sticky="W")
+    ttk.Button(data_container, text="Capture", command=lambda: capture(controller, gesture_name)).grid(column=4, row=1,
+                                                                                                       sticky="W")
 
     handler = DataHandler()
     controller.camera_handler.add_observer(handler)
@@ -94,10 +100,6 @@ def run(controller: EngineController):
 
 def stop(controller: EngineController):
     controller.stop()
-
-
-def capture(controller: EngineController):
-    controller.capture()
 
 
 def run_gui(controller: EngineController):

@@ -7,8 +7,9 @@ from gesture_glide.engine_controller import EngineController
 from gesture_glide.gui import run_gui
 
 # TODO delete after testing Suppress the specific warning
-import warnings ; warnings.warn = lambda *args,**kwargs: None
+import warnings;
 
+warnings.warn = lambda *args, **kwargs: None
 
 
 @click.command()
@@ -21,6 +22,7 @@ def main():
 
     engine_controller.stop()
     sys.exit(0)
+
 
 if __name__ == '__main__':
     main()

@@ -1,5 +1,5 @@
 import time
-from threading import Thread, Event
+from threading import Thread
 
 from gesture_glide.camera_handler import CameraHandler
 from gesture_glide.config import Config
@@ -28,7 +28,7 @@ class EngineController:
         self.scroll_recognizer = HandMovementRecognizer(self.mp_wrapper)
         self.gesture_recognizer = GestureRecognizer(config, self.mp_wrapper)
         self.gesture_interpreter = GestureInterpreter(self.config, self.mp_wrapper,
-                                                      self.scroll_recognizer,self.gesture_recognizer)
+                                                      self.scroll_recognizer, self.gesture_recognizer)
         self.gesture_writer = GestureWriter(self.config, self.mp_wrapper)
         self.running_thread = None
 
@@ -45,5 +45,5 @@ class EngineController:
                 self.running_thread.join(1)
                 time.sleep(1)
 
-    def capture(self):
-        self.gesture_writer.capture_gesture("knecht")
+    def capture(self, gesture_name):
+        self.gesture_writer.capture_gesture(gesture_name)

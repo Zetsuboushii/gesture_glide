@@ -49,6 +49,11 @@ class RecognizedGesture(enum.Enum):
     ROULETTE_MINUS = 2
 
 
+class GestureMode(enum.Enum):
+    DEFAULT = 0
+    ROULETTE = 1
+
+
 class ScrollData:
     direction: ScrollDirection
     speed: float
