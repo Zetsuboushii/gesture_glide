@@ -7,7 +7,7 @@ from gesture_glide.shortcuts.generic_scroll_shortcut import GenericScrollShortcu
 from gesture_glide.shortcuts.roulette_command_shortcut import RouletteCommandShortcut
 from gesture_glide.shortcuts.roulette_open_shortcut import RouletteOpenShortcut
 from gesture_glide.utils import Observer, RecognizedGesture, switch_to_previous_screen, GestureMode
-
+                                   
 
 class GestureInterpreter(Observer):
     config: Config
