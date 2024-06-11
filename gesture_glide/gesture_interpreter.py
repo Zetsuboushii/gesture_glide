@@ -44,8 +44,12 @@ class GestureInterpreter(Observer):
     def should_process_new_gesture(self) -> bool:
         current_time = time.time()
         time_diff = current_time - self.last_gesture_time
-        if time_diff < 1:
-            return False
+        if GestureMode.DEFAULT:
+            if time_diff < 5:
+                return False
+        else:
+            if time_diff < 1:
+                return False
         self.last_gesture_time = current_time
         return True
 
