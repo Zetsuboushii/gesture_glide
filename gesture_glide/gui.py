@@ -1,5 +1,5 @@
 import threading
-from tkinter import Tk, Frame, StringVar, ttk, Entry
+from tkinter import Tk, Frame, StringVar, ttk, Entry, HORIZONTAL, Scale
 
 import cv2
 from PIL import ImageTk, Image
@@ -73,6 +73,18 @@ def setup_gui(root: Tk, controller: EngineController):
     gesture_name_entry = Entry(data_container, textvariable=gesture_name)
     gesture_name_entry.grid(column=1, row=2, sticky="W")
 
+    SLIDER_WIDTH = 300
+
+    settings = Frame(frame, width=600)
+    settings.grid()
+    ttk.Label(settings, text="Speed threshold").grid(column=0, row=0, sticky="W")
+    spd_thrld_slider = Scale(settings, from_=0, to=200, orient=HORIZONTAL)
+    spd_thrld_slider.grid(column=1, row=0, sticky="W")
+
+    ttk.Label(settings, text="Spread threshold").grid(column=0, row=1, sticky="W")
+    spread_thrld_slider = Scale(settings, from_=0, to=200, orient=HORIZONTAL)
+    spread_thrld_slider.grid(column=1, row=1, sticky="W")
+
     ttk.Label(data_container, text="FPS").grid(column=0, row=0, sticky="W")
     ttk.Label(data_container, textvariable=frame_rate).grid(column=1, row=0, sticky="W")
 
@@ -82,6 +94,7 @@ def setup_gui(root: Tk, controller: EngineController):
                                                                                                  sticky="W")
     ttk.Button(data_container, text="Capture", command=lambda: capture(controller, gesture_name)).grid(column=4, row=1,
                                                                                                        sticky="W")
+    ttk.Button(data_container, text="Apply", command=lambda: controller.apply_user_settings(spd_thrld_slider.get() / 100.0, spread_thrld_slider.get() / 100.0)).grid(column=5, row=1, sticky="W")
 
     handler = DataHandler()
     controller.camera_handler.add_observer(handler)

@@ -1,5 +1,4 @@
 import logging
-from pywinauto import Desktop
 from gesture_glide.config import Config
 
 
@@ -14,6 +13,7 @@ class ApplicationShortcut:
 
     def init_scroll_backend(self):
         try:
+            from pywinauto import Desktop
             self.desktop = Desktop(backend="uia")
             self.application_window = self.get_window()
         except Exception as e:

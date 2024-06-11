@@ -31,6 +31,11 @@ class HandMovementRecognizer(Observer, Observable):
         self.previous_y_center_right = None
         self.last_valid_right_hand_frame_data = None
         self.last_valid_left_hand_frame_data = None
+        self.apply_user_settings(1.0, 1.0)
+
+    def apply_user_settings(self, speed_threshold_multiplayer: float, spread_threshold_multiplier: float):
+        self.inter_frame_movement_detection_relative_speed_threshold = INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD * speed_threshold_multiplayer
+        self.scroll_enablement_spread_delta_threshold = SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * spread_threshold_multiplier
 
     def get_past_comparison_hand(self, hand_data_buffer):
         try:
@@ -70,7 +75,7 @@ class HandMovementRecognizer(Observer, Observable):
             most_dominant_movement = Directions.UP if y_movement < 0 else Directions.DOWN
             speed = abs(y_movement) / time_delta
 
-        if speed > INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD:
+        if speed > self.inter_frame_movement_detection_relative_speed_threshold:
             movement_flag = True
 
         return movement_flag, most_dominant_movement, speed
