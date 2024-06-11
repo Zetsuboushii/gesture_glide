@@ -6,3 +6,5 @@ venv
 *.spec
 build/
 dist/
+
+gestures.json
