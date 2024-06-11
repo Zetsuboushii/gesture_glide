@@ -1,7 +1,6 @@
 import enum
 from typing import Any, List
-
-from pywinauto.keyboard import send_keys
+import pyautogui
 
 
 class Observable:
@@ -154,4 +153,4 @@ def get_last_valid_frame_data(hand_data_buffer: List[FrameData], counter: int,
 
 
 def switch_to_previous_screen():
-    send_keys("%{TAB}")
+    pyautogui.hotkey('alt', 'tab')
