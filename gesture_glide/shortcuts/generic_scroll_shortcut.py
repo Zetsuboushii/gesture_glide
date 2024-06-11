@@ -1,4 +1,5 @@
 import ctypes
+import logging
 import math
 import time
 from threading import Event, Thread
@@ -46,13 +47,12 @@ class GenericScrollShortcut(ApplicationShortcut):
 
     def scroll_action(self, command: ScrollData):
         # Simulates mouse wheel actions based on detected hand movement direction
-        active_window_handle = ctypes.windll.user32.GetForegroundWindow()
-        self.active_window = Desktop(backend="uia").window(handle=active_window_handle)
-        print("Window: ", self.active_window.window_text())
+        self.get_current_window()
+        logging.debug("Window: ", self.active_window.window_text())
         try:
             for _ in range(10):
                 base = 2
                 speed = math.ceil(1 if command.speed <= 0.4 else base ** (command.speed * 2))
                 self.active_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
         except Exception as e:
-            print(e)
+            logging.debug(e)

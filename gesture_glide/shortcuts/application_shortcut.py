@@ -1,4 +1,7 @@
+import ctypes
 import logging
+
+from pywinauto import Desktop
 
 from gesture_glide.config import Config
 
@@ -12,10 +15,22 @@ class ApplicationShortcut:
         self.pdf_window = None
         self.init_scroll_backend()
         self.active_window = None
+        self.last_active_window = None
+
+
+    def get_current_window(self):
+        active_window_handle = ctypes.windll.user32.GetForegroundWindow()
+        self.active_window = Desktop(backend="uia").window(handle=active_window_handle)
+
+
+    def switch_to_previous_screen(self):
+        if self.last_active_window:
+            print("Switched to ", self.last_active_window)
+            self.last_active_window.set_focus()
+
 
     def init_scroll_backend(self):
         try:
-            from pywinauto import Desktop
             self.desktop = Desktop(backend="uia")
             self.pdf_window = self.desktop.window(class_name="AcrobatSDIWindow")
 

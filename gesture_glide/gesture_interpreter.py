@@ -6,7 +6,7 @@ from gesture_glide.mp_wrapper import MPWrapper
 from gesture_glide.shortcuts.generic_scroll_shortcut import GenericScrollShortcut
 from gesture_glide.shortcuts.roulette_command_shortcut import RouletteCommandShortcut
 from gesture_glide.shortcuts.roulette_open_shortcut import RouletteOpenShortcut
-from gesture_glide.utils import Observer, RecognizedGesture, switch_to_previous_screen, GestureMode
+from gesture_glide.utils import Observer, RecognizedGesture, GestureMode
                                    
 
 class GestureInterpreter(Observer):
@@ -79,5 +79,5 @@ class GestureInterpreter(Observer):
             case RecognizedGesture.ROULETTE_MINUS:
                 self.roulette_command_shortcut.execute("-")
             case RecognizedGesture.OPEN_ROULETTE:
-                switch_to_previous_screen()
+                self.roulette_open_shortcut.switch_to_previous_screen()
                 self.gesture_mode = GestureMode.DEFAULT
