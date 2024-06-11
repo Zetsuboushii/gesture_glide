@@ -1,8 +1,5 @@
 import ctypes
 import logging
-
-from pywinauto import Desktop
-
 from gesture_glide.config import Config
 
 
@@ -19,6 +16,9 @@ class ApplicationShortcut:
 
 
     def get_current_window(self):
+        # TODO: Delete redundant imports
+        # for mac "support" as library isn't supported
+        from pywinauto import Desktop
         active_window_handle = ctypes.windll.user32.GetForegroundWindow()
         self.active_window = Desktop(backend="uia").window(handle=active_window_handle)
 
@@ -31,10 +31,11 @@ class ApplicationShortcut:
 
     def init_scroll_backend(self):
         try:
+            # TODO: Delete redundant imports (2)
+            # for mac "support" as library isn't supported
+            from pywinauto import Desktop
             self.desktop = Desktop(backend="uia")
             self.pdf_window = self.desktop.window(class_name="AcrobatSDIWindow")
-
-
         except Exception as e:
             logging.error(e)
 

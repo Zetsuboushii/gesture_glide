@@ -44,4 +44,4 @@ elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
 accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
 amet.
 
-GestureGlide © Miguel Themann, Isa Barbu, Nick Büttner, Luke Grasser 2024
+GestureGlide © Isa Barbu, Nick Büttner, Luke Grasser, Miguel Themann 2024
