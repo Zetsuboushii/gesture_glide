@@ -1,6 +1,9 @@
+import ctypes
 import math
 import time
 from threading import Event, Thread
+
+from pywinauto import Desktop
 
 from gesture_glide.config import Config
 from gesture_glide.hand_movement_recognizer import ScrollData
@@ -43,10 +46,14 @@ class GenericScrollShortcut(ApplicationShortcut):
 
     def scroll_action(self, command: ScrollData):
         # Simulates mouse wheel actions based on detected hand movement direction
+        active_window_handle = ctypes.windll.user32.GetForegroundWindow()
+        self.active_window = Desktop(backend="uia").window(handle=active_window_handle)
+        print("Window: ", self.active_window.window_text(), end="")
         try:
             for _ in range(10):
                 base = 2
                 speed = math.ceil(1 if command.speed <= 0.4 else base ** (command.speed * 2))
-                self.pdf_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
+                self.active_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
+                # self.pdf_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
         except Exception as e:
             print(e)

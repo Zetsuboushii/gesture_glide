@@ -11,12 +11,15 @@ class ApplicationShortcut:
         self.desktop = None
         self.pdf_window = None
         self.init_scroll_backend()
+        self.active_window = None
 
     def init_scroll_backend(self):
         try:
             from pywinauto import Desktop
             self.desktop = Desktop(backend="uia")
             self.pdf_window = self.desktop.window(class_name="AcrobatSDIWindow")
+
+
         except Exception as e:
             logging.error(e)
 
