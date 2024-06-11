@@ -48,7 +48,7 @@ class GenericScrollShortcut(ApplicationShortcut):
         # Simulates mouse wheel actions based on detected hand movement direction
         active_window_handle = ctypes.windll.user32.GetForegroundWindow()
         self.active_window = Desktop(backend="uia").window(handle=active_window_handle)
-        print("Window: ", self.active_window.window_text(), end="")
+        print("Window: ", self.active_window.window_text())
         try:
             for _ in range(10):
                 base = 2
