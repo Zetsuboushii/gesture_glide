@@ -1,3 +1,4 @@
+import ctypes
 import logging
 from gesture_glide.config import Config
 
@@ -8,59 +9,35 @@ class ApplicationShortcut:
     def __init__(self, config: Config):
         self.config = config
         self.desktop = None
-        self.application_window = None
+        self.pdf_window = None
         self.init_scroll_backend()
+        self.active_window = None
+        self.last_active_window = None
+
+
+    def get_current_window(self):
+        # TODO: Delete redundant imports
+        # for mac "support" as library isn't supported
+        from pywinauto import Desktop
+        active_window_handle = ctypes.windll.user32.GetForegroundWindow()
+        self.active_window = Desktop(backend="uia").window(handle=active_window_handle)
+
+
+    def switch_to_previous_screen(self):
+        if self.last_active_window:
+            print("Switched to ", self.last_active_window)
+            self.last_active_window.set_focus()
+
 
     def init_scroll_backend(self):
         try:
+            # TODO: Delete redundant imports (2)
+            # for mac "support" as library isn't supported
             from pywinauto import Desktop
             self.desktop = Desktop(backend="uia")
-            self.application_window = self.get_window()
+            self.pdf_window = self.desktop.window(class_name="AcrobatSDIWindow")
         except Exception as e:
             logging.error(e)
 
-    def get_window(self):
-        try:
-            # Check for Acrobat Reader window
-            acrobat_window = self.desktop.window(class_name="AcrobatSDIWindow")
-            if acrobat_window.exists():
-                return acrobat_window
-        except Exception as e:
-            logging.info("Acrobat Reader not found.")
-
-        try:
-            # Check for Firefox window
-            firefox_window = self.desktop.window(class_name="MozillaWindowClass")
-            if firefox_window.exists():
-                return firefox_window
-        except Exception as e:
-            logging.info("Firefox not found.")
-
-        try:
-            # Check for Chromium based windows
-            chromium_window = self.desktop.window(class_name="Chrome_WidgetWin_1")
-            if chromium_window.exists():
-                return chromium_window
-        except Exception as e:
-            logging.info("Chromium not found.")
-
-        try:
-            # Check for IntelliJ based windows
-            intellij_window = self.desktop.window(class_name="SunAwtFrame")
-            if intellij_window.exists():
-                return intellij_window
-        except Exception as e:
-            logging.info("IntelliJ not found.")
-
-        logging.warning("No supported application found.")
-        return None
-
     def execute(self, **kwargs):
-        if self.application_window:
-            self.scroll_window(**kwargs)
-        else:
-            logging.warning("No application window available for scrolling.")
-
-    def scroll_window(self, **kwargs):
-        # Implement scrolling functionality here
-        pass
+        raise NotImplementedError()

@@ -20,7 +20,7 @@ class GestureWriter(Observer, Observable):
 
     def capture_gesture(self, gesture_name: str):
         self.save_gesture(gesture_name, self.landmarks)
-        print(f"Gesture '{gesture_name}' was saved")
+        logging.debug(f"Gesture '{gesture_name}' was saved")
 
         # mp_wrapper.set_capture_callback(capture_callback)
 

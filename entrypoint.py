@@ -1,5 +1,4 @@
 import sys
-
 import click
 
 from gesture_glide.config import load_config

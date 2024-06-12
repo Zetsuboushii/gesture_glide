@@ -1,3 +1,4 @@
+import logging
 import math
 import time
 from typing import List
@@ -14,10 +15,11 @@ from gesture_glide.utils import Observer, Observable, Handedness, ScrollDirectio
 # TODO maybe change delta if needed
 DELTA_TIME = 0.5
 # TODO keep an eye on naming !
-INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD = 0.05
+INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD = 0.10
 SCROLL_COMMAND_SPEED_THRESHOLD = 0.25
-HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD = 0.15
+HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD = 0.15 # Treshold for detecting that 2 hands transferred detected side (for mono hand)
 SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD = 93
+SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX = 4
 
 
 class HandMovementRecognizer(Observer, Observable):
@@ -95,10 +97,10 @@ class HandMovementRecognizer(Observer, Observable):
         left_hand_movement_detected, left_hand_movement_direction, left_hand_speed = self.calculcate_movement_data_for_hand_with_fallback(
             previous_hand_landmarks_left, hand_landmarks_left, time_delta_left, Handedness.LEFT)
 
-        print("Left movement: ", left_hand_movement_detected, end="")
-        print("Right movement: ", right_hand_movement_detected, end="")
-        print("Left speed: ", left_hand_speed, end="")
-        print("Right speed: ", right_hand_speed, end="")
+        logging.debug("Left movement: ", left_hand_movement_detected, end="")
+        logging.debug("Right movement: ", right_hand_movement_detected, end="")
+        logging.debug("Left speed: ", left_hand_speed, end="")
+        logging.debug("Right speed: ", right_hand_speed, end="")
 
         current_hand_data.left_hand_movement_data.speed = left_hand_speed
         current_hand_data.right_hand_movement_data.speed = right_hand_speed
@@ -128,8 +130,8 @@ class HandMovementRecognizer(Observer, Observable):
 
         # TODO: better name
         def did_start_scoll(spread_delta, direction: Directions):
-            threshold = -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-2].time)
-            print("Spread thresh:", threshold)
+            threshold = -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time)
+            logging.debug("Spread thresh:", threshold)
             return spread_delta < threshold and direction in {
                 Directions.UP, Directions.DOWN}
 
@@ -178,10 +180,17 @@ class HandMovementRecognizer(Observer, Observable):
                 hand_data_buffer[-1].mono_hand_movement_data = None
 
         try:
-            spread_delta = hand_data_buffer[-1].mono_hand_movement_data.spread - hand_data_buffer[-2].mono_hand_movement_data.spread
+            spread_delta = hand_data_buffer[-1].mono_hand_movement_data.spread - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].mono_hand_movement_data.spread
         except (AttributeError, TypeError): # movement data or spread None
             spread_delta = None
-        print("Spread delta M: ", spread_delta, end="")
+        logging.debug("Spread delta M: ", spread_delta, end="")
+        #TODO delete print and if
+        if hand_data_buffer[-1].mono_hand_movement_data is not None and hand_data_buffer[-1].mono_hand_movement_data.speed is not None and spread_delta is not None:
+            if hand_data_buffer[-1].mono_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_THRESHOLD and spread_delta < -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time):
+                print("Speed M: ",hand_data_buffer[-1].mono_hand_movement_data.speed, SCROLL_COMMAND_SPEED_THRESHOLD, end=" ")
+                print("Delta_Spread M: ",spread_delta, - SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time))
+
+
 
         if hand_data_buffer[-1].mono_hand_movement_data is not None and spread_delta is not None:
             if did_start_scoll(spread_delta, hand_data_buffer[-1].mono_hand_movement_data.direction):
@@ -349,20 +358,19 @@ class HandMovementRecognizer(Observer, Observable):
 
         scroll_command = self.calculate_movement_command(hand_data_buffer)
         if time_between_frames_left:
-            print(f"L-tbf: {time_between_frames_left:.3f}", end=" ")
+            logging.debug(f"L-tbf: {time_between_frames_left:.3f}", end=" ")
         if time_between_frames_right:
-            print(f"R-tbf: {time_between_frames_right:.3f}", end=" ")
+            logging.debug(f"R-tbf: {time_between_frames_right:.3f}", end=" ")
         if movement_state_str_r:
-            print(movement_state_str_r, end=" ")
+            logging.debug(movement_state_str_r, end=" ")
         if movement_state_str_l:
-            print(movement_state_str_l, end=" ")
+            logging.debug(movement_state_str_l, end=" ")
         if movement_state_str_m:
-            print(movement_state_str_m, end=" ")
+            logging.debug(movement_state_str_m, end=" ")
         if right_distance_str:
-            print(right_distance_str, end=" ")
+            logging.debug(right_distance_str, end=" ")
         if left_distance_str:
-            print(left_distance_str, end=" ")
-        print()
+            logging.debug(left_distance_str)
 
         mp.solutions.drawing_utils.draw_landmarks(frame, hand_landmarks_right,
                                                   self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
@@ -371,7 +379,7 @@ class HandMovementRecognizer(Observer, Observable):
 
         send_scroll_command = False
         if scroll_command is not None:
-            print(f"Sending scroll command: {scroll_command}")
+            logging.debug(f"Sending scroll command: {scroll_command}")
             send_scroll_command = True
 
         self.notify_observers(scroll_command=scroll_command if send_scroll_command else None,

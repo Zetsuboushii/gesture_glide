@@ -1,6 +1,10 @@
+import ctypes
+import logging
 import math
 import time
 from threading import Event, Thread
+
+from pywinauto import Desktop
 
 from gesture_glide.config import Config
 from gesture_glide.hand_movement_recognizer import ScrollData
@@ -17,6 +21,7 @@ class GenericScrollShortcut(ApplicationShortcut):
         self.scrolling = Event()
         self.terminate = Event()
         self.scroll_data = None
+        self.scroll_speed_multiplier = 1.0
 
     def execute(self, **kwargs):
         """Set scroll command to be executed by running scroll loop."""
@@ -26,6 +31,9 @@ class GenericScrollShortcut(ApplicationShortcut):
             self.scrolling.set()
         else:
             self.scrolling.clear()
+
+    def apply_user_settings(self, scroll_speed_multiplier: float):
+        self.scroll_speed_multiplier = scroll_speed_multiplier
 
     def run(self):
         """Execute scroll loop in separate thread"""
@@ -47,10 +55,12 @@ class GenericScrollShortcut(ApplicationShortcut):
 
     def scroll_action(self, command: ScrollData):
         # Simulates mouse wheel actions based on detected hand movement direction
+        self.get_current_window()
+        logging.debug("Window: ", self.active_window.window_text())
         try:
             for _ in range(10):
                 base = 2
-                speed = math.ceil(1 if command.speed <= 0.4 else base ** (command.speed * 2))
-                self.application_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
+                speed = math.ceil((1 if command.speed <= 0.4 else base ** (command.speed * 2)) * self.scroll_speed_multiplier)
+                self.active_window.wheel_mouse_input(wheel_dist=-command.direction.value * speed)
         except Exception as e:
-            print(e)
+            logging.debug(e)
