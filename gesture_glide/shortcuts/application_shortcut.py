@@ -41,4 +41,5 @@ class ApplicationShortcut:
             logging.error(e)
 
     def execute(self, **kwargs):
+        """Execute the shortcut's specific command(s)."""
         raise NotImplementedError()

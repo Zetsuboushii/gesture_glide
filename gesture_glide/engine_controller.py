@@ -51,4 +51,5 @@ class EngineController:
                 time.sleep(1)
 
     def capture(self, gesture_name):
+        """Capture gesture for user defined gestures."""
         self.gesture_writer.capture_gesture(gesture_name)

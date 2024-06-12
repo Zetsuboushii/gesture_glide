@@ -11,6 +11,7 @@ from gesture_glide.utils import Observer, RecognizedGesture, GestureMode, Observ
 
 
 class GestureInterpreter(Observer, Observable):
+    """Handles interpretation of already detected `RecognizedGesture`s"""
     config: Config
 
     def __init__(self, config: Config, mp_wrapper: MPWrapper, movement_recognizer: HandMovementRecognizer,

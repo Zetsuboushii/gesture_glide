@@ -41,11 +41,13 @@ class HandMovementRecognizer(Observer, Observable):
     def get_hand_spread(self, landmarks: List[Landmark]) -> float | None:
         if len(landmarks) < 2:
             return None
+        # spread = sum of distances between each pair of landmarks (cartesian product)
         combinations = [(a, b) for a in landmarks for b in landmarks if a != b]
         return sum(abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z) for a, b in
                    combinations)
 
     def get_hand_landmark(self, mp_results, target_handedness: Handedness) -> List[Landmark] | None:
+        """Return hand landmarks for given handedness of the recognized results in `mp_results`"""
         if mp_results.multi_hand_landmarks:
             for hand_landmarks, handedness in zip(mp_results.multi_hand_landmarks,
                                                   mp_results.multi_handedness):
@@ -57,12 +59,13 @@ class HandMovementRecognizer(Observer, Observable):
         return math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2)
 
     def calculate_movement_data(self, current_wrist: float, previous_wrist: float, time_delta):
+        ''' calculate the movement data for one hand (speed, movement_flag, most_dominant_movement) '''
         movement_flag = False
 
         x_movement = current_wrist.x - previous_wrist.x
         y_movement = current_wrist.y - previous_wrist.y
 
-        # Determine the most dominant movement direction
+        # determine the most dominant movement direction
         if abs(x_movement) > abs(y_movement):
             most_dominant_movement = Directions.RIGHT if x_movement > 0 else Directions.LEFT
             speed = abs(x_movement) / time_delta
@@ -82,7 +85,7 @@ class HandMovementRecognizer(Observer, Observable):
                                       hand_landmarks_left=None,
                                       previous_hand_landmarks_right=None,
                                       previous_hand_landmarks_left=None):
-
+        ''' determine the hand movement state for both hands and the mono_hand and saves it to the latest hand_data_buffer entry '''
         current_hand_data = hand_data_buffer[-1]
 
         right_hand_movement_detected, right_hand_movement_direction, right_hand_speed = self.calculcate_movement_data_for_hand_with_fallback(
@@ -117,11 +120,16 @@ class HandMovementRecognizer(Observer, Observable):
         self.apply_mono_hand_movement_state(hand_data_buffer)
 
     def apply_mono_hand_movement_state(self, hand_data_buffer: List[FrameData]):
+        ''' Determine the mono hand movement state and saves it to the latest hand_data_buffer entry.
+        As mediapipe accidentally switches between left and right hand for one real hand.
+        We instead of the left and right hand data use the mono hand.
+        Mono hand ist referenced to currently active hand (in movement) as calculated from (previous) hand movements (including hand switchovers)
+        this circumvents the handedness switch
+        '''
         current_left = hand_data_buffer[-1].left_hand_movement_data
         current_right = hand_data_buffer[-1].right_hand_movement_data
         previous_movement = hand_data_buffer[-2].mono_hand_movement_data
 
-        # TODO: better name
         def did_start_scoll(spread_delta, direction: Directions):
             threshold = -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time)
             logging.debug("Spread thresh:", threshold)
@@ -138,7 +146,7 @@ class HandMovementRecognizer(Observer, Observable):
                 hand_data_buffer[-1].mono_hand_movement_data = current_right
 
         else:
-            # TODO: Is it worth it to generalize this and make it unreadable in the process?
+
             previous_left = self.get_hand_landmark(hand_data_buffer[-2].results, Handedness.LEFT)
             previous_right = self.get_hand_landmark(hand_data_buffer[-2].results, Handedness.RIGHT)
             current_left = self.get_hand_landmark(hand_data_buffer[-1].results, Handedness.LEFT)
@@ -150,6 +158,7 @@ class HandMovementRecognizer(Observer, Observable):
             current_left_wrist = current_left.landmark[0] if current_left else None
             current_right_wrist = current_right.landmark[0] if current_right else None
 
+            # Checks to determine which hand is & was moving to determine the mono hand
             if previous_left and current_left and self.get_euclidean_distance(previous_left_wrist,
                                                                               current_left_wrist) < HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD:  # left hand moving, no transfer
                 hand_data_buffer[-1].mono_hand_movement_data = hand_data_buffer[
@@ -176,30 +185,30 @@ class HandMovementRecognizer(Observer, Observable):
             spread_delta = hand_data_buffer[-1].mono_hand_movement_data.spread - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].mono_hand_movement_data.spread
         except (AttributeError, TypeError): # movement data or spread None
             spread_delta = None
-        logging.debug("Spread delta M: ", spread_delta, end="")
-        #TODO delete print and if
+
+        # Just for debugging purposes
+        logging.debug("Spread delta M: ", spread_delta, end=" ")
         if hand_data_buffer[-1].mono_hand_movement_data is not None and hand_data_buffer[-1].mono_hand_movement_data.speed is not None and spread_delta is not None:
             if hand_data_buffer[-1].mono_hand_movement_data.speed >= SCROLL_COMMAND_SPEED_THRESHOLD and spread_delta < -SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time):
-                print("Speed M: ",hand_data_buffer[-1].mono_hand_movement_data.speed, SCROLL_COMMAND_SPEED_THRESHOLD, end=" ")
-                print("Delta_Spread M: ",spread_delta, - SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time))
+                logging.debug("Speed M: ",hand_data_buffer[-1].mono_hand_movement_data.speed, SCROLL_COMMAND_SPEED_THRESHOLD, end=" ")
+                logging.debug("Delta_Spread M: ",spread_delta, - SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * (hand_data_buffer[-1].time - hand_data_buffer[-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX].time))
 
-
-
+        # Check if scrolling as that might not be detected in the individual hand in the moment mediapipe switches the recognized hand side
         if hand_data_buffer[-1].mono_hand_movement_data is not None and spread_delta is not None:
             if did_start_scoll(spread_delta, hand_data_buffer[-1].mono_hand_movement_data.direction):
                 hand_data_buffer[-1].mono_hand_movement_data.hand_movement_type = HandMovementType.SCROLLING
 
 
-    # TODO: Better name
     def calculcate_movement_data_for_hand_with_fallback(self, previous_landmarks, current_landmarks,
                                                         time_delta,
                                                         handedness: Handedness):
+        """Calculate the movement data for the hand specified by `handedness` from the given landmarks.
+        Fallback to the previous frame's movement data if current movement can't be calculated."""
         last_valid = self.last_valid_right_hand_frame_data if handedness == Handedness.RIGHT else self.last_valid_left_hand_frame_data
         if previous_landmarks is not None and current_landmarks is not None:
             movement_detected, movement_direction, speed = self.calculate_movement_data_for_hand(
                 current_landmarks, previous_landmarks, time_delta)
         elif current_landmarks is not None and last_valid is not None:
-            # TODO: Refactor function call with above lines
             movement_detected, movement_direction, speed = self.calculate_movement_data_for_hand(
                 current_landmarks, self.get_hand_landmark(last_valid.results, handedness),
                 time_delta)
@@ -215,6 +224,7 @@ class HandMovementRecognizer(Observer, Observable):
         return movement_detected, movement_direction, speed
 
     def calculate_movement_data_for_hand(self, hand_landmarks, previous_hand_landmarks, time_delta):
+        """Calculate the concrete movement data between the given (and valid) landmarks."""
         current_wrist = hand_landmarks.landmark[self.mp_wrapper.mp_hands.HandLandmark.WRIST]
         previous_wrist = previous_hand_landmarks.landmark[
             self.mp_wrapper.mp_hands.HandLandmark.WRIST]
@@ -225,6 +235,7 @@ class HandMovementRecognizer(Observer, Observable):
                                            hand_movement_direction: Directions,
                                            hand_data_buffer: List[FrameData],
                                            handedness: Handedness):
+        """Apply the hand movement state for the hand specified by `handedness` in the given hand data buffer."""
         previous_frame_data, current_frame_data = hand_data_buffer[-2], hand_data_buffer[-1]
         previous_hand_data = self.get_hand_movement_data(previous_frame_data, handedness)
         current_hand_data = self.get_hand_movement_data(current_frame_data, handedness)
@@ -237,7 +248,7 @@ class HandMovementRecognizer(Observer, Observable):
         current_hand_data.hand_movement_type = previous_hand_data.hand_movement_type
         spread_delta = current_hand_data.spread - previous_hand_data.spread if current_hand_data.spread is not None and previous_hand_data.spread is not None else None
         hand_smaller = spread_delta < SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD if spread_delta is not None else False
-        # Current always contains valid hand data as handle_empty_current_frame_data() is called otherwise
+
         match previous_hand_data.hand_movement_state:
             case HandMovementState.NO_MOVEMENT:
                 if hand_movement_detected:
@@ -264,6 +275,7 @@ class HandMovementRecognizer(Observer, Observable):
                 if hand_movement_detected:
                     current_hand_data.hand_movement_state = HandMovementState.IN_MOVEMENT
                 else:
+                    # Check if the last 3 frames were in quasi end state
                     if all(self.get_hand_movement_data(frame_data,
                                                        handedness).hand_movement_state == HandMovementState.QUASI_END
                            for
@@ -286,6 +298,7 @@ class HandMovementRecognizer(Observer, Observable):
         return frame_data.left_hand_movement_data if handedness == Handedness.LEFT else frame_data.right_hand_movement_data
 
     def calculate_movement_command(self, hand_data_buffer: List[FrameData]):
+        """Calculate the movement command derived from the mono hands' movement data."""
         current = hand_data_buffer[-1]
         if current.mono_hand_movement_data is None:
             return None
@@ -298,10 +311,7 @@ class HandMovementRecognizer(Observer, Observable):
     def update(self, observable, *args, **kwargs):
         metadata: FrameMetadata = kwargs["metadata"]
         hand_data_buffer: List[FrameData] = kwargs["hand_data_buffer"]
-        scroll_command: ScrollData | None = None
         frame = kwargs["frame"]
-        frame_height = metadata.height
-        hand_landmarks_left, hand_landmarks_right = None, None
 
         current_hand_data = hand_data_buffer[-1].results
 
@@ -345,6 +355,7 @@ class HandMovementRecognizer(Observer, Observable):
         if hand_landmarks_left:
             self.last_valid_left_hand_frame_data = hand_data_buffer[-1]
 
+        # debug information
         movement_state_str_r = f"R: {hand_data_buffer[-1].right_hand_movement_data.hand_movement_state.name}"
         movement_state_str_l = f"L: {hand_data_buffer[-1].left_hand_movement_data.hand_movement_state.name}"
         movement_state_str_m = f"M: {hand_data_buffer[-1].mono_hand_movement_data.hand_movement_state.name if hand_data_buffer[-1].mono_hand_movement_data else None}"
@@ -365,6 +376,7 @@ class HandMovementRecognizer(Observer, Observable):
         if left_distance_str:
             logging.debug(left_distance_str)
 
+        # Draw mediapipes' detected landmarks onto frame so that it can be forwarded to the GUI
         mp.solutions.drawing_utils.draw_landmarks(frame, hand_landmarks_right,
                                                   self.mp_wrapper.mp_hands.HAND_CONNECTIONS)
         mp.solutions.drawing_utils.draw_landmarks(frame, hand_landmarks_left,
