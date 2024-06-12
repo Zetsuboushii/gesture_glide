@@ -7,6 +7,7 @@ from gesture_glide.shortcuts.generic_scroll_shortcut import GenericScrollShortcu
 from gesture_glide.shortcuts.rickroll_shortcut import RickRollShortcut
 from gesture_glide.shortcuts.roulette_command_shortcut import RouletteCommandShortcut
 from gesture_glide.shortcuts.roulette_open_shortcut import RouletteOpenShortcut
+from gesture_glide.shortcuts.microsoft_office_powerpoint_shortcut import MicrosoftOfficePowerPointCommandShortcut
 from gesture_glide.utils import Observer, RecognizedGesture, GestureMode, Observable
 
 
@@ -26,6 +27,7 @@ class GestureInterpreter(Observer, Observable):
         self.roulette_open_shortcut = RouletteOpenShortcut(config)
         self.roulette_command_shortcut = RouletteCommandShortcut(config)
         self.rickroll_shortcut = RickRollShortcut(config)
+        self.microsoft_office_powerpoint_shortcut = MicrosoftOfficePowerPointCommandShortcut(config)
         self.last_gesture_time = 0
 
     def run(self):
@@ -39,7 +41,8 @@ class GestureInterpreter(Observer, Observable):
         gesture = kwargs.get("recognized_gesture")
         time_delta = time.time() - self.last_gesture_time
 
-        # Ignore scroll commands if immediately after gesture (e.g. when switching between thumps up/down relatively quickly
+        # Ignore scroll commands if immediately after gesture (e.g. when switching between thumps up/down relatively
+        # quickly
         if scroll_command is not None and time_delta > 1:
             self.process_scroll_command(**kwargs)
         elif gesture:
@@ -51,7 +54,8 @@ class GestureInterpreter(Observer, Observable):
         self.scroll_shortcut.apply_user_settings(scroll_speed_multiplier)
 
     def should_process_new_gesture(self, gesture: RecognizedGesture | None) -> bool:
-        """Determine if gesture should be processed based on their cooldown period (in order to prevent multiple activations over multiple frames in a short interval."""
+        """Determine if gesture should be processed based on their cooldown period (in order to prevent multiple
+        activations over multiple frames in a short interval."""
         current_time = time.time()
         time_diff = current_time - self.last_gesture_time
         if GestureMode.DEFAULT:
@@ -89,8 +93,10 @@ class GestureInterpreter(Observer, Observable):
     def process_roulette_mode_gesture(self, gesture):
         match gesture:
             case RecognizedGesture.ROULETTE_PLUS:
+                self.microsoft_office_powerpoint_shortcut.execute("LEFT")
                 self.roulette_command_shortcut.execute("+")
             case RecognizedGesture.ROULETTE_MINUS:
+                self.microsoft_office_powerpoint_shortcut.execute("RIGHT")
                 self.roulette_command_shortcut.execute("-")
             case RecognizedGesture.OPEN_ROULETTE:
                 self.roulette_open_shortcut.switch_to_previous_screen()

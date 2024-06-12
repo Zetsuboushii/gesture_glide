@@ -24,12 +24,10 @@ class ApplicationShortcut:
         except Exception as e:
             logging.error(e)
 
-
     def switch_to_previous_screen(self):
         if self.last_active_window:
             print("Switched to ", self.last_active_window)
             self.last_active_window.set_focus()
-
 
     def init_scroll_backend(self):
         try:
