@@ -1,3 +1,4 @@
+# Autoren: Nick Büttner,Miguel Themann,Luke Grasser
 import ctypes
 import logging
 from gesture_glide.config import Config

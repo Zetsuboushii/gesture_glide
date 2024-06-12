@@ -1,3 +1,4 @@
+# Autoren: Nick Büttner,Miguel Themann
 import time
 from threading import Event
 

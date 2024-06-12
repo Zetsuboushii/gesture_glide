@@ -1,3 +1,4 @@
+# Autoren: Isabel Barbu,Nick Büttner,Miguel Themann,Luke Grasser
 import time
 from gesture_glide.config import Config
 from gesture_glide.gesture_recognizer import GestureRecognizer

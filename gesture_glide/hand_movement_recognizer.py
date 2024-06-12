@@ -1,3 +1,4 @@
+# Autoren: Nick Büttner,Miguel Themann
 import logging
 import math
 import time

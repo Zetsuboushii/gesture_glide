@@ -1,3 +1,4 @@
+# Autoren: Nick Büttner,Miguel Themann,Miguel Themann,Luke Grasser
 import threading
 from tkinter import Tk, Frame, StringVar, ttk, Entry, HORIZONTAL, Scale
 

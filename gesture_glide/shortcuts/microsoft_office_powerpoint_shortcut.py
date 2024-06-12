@@ -1,3 +1,4 @@
+# Autoren: Luke Grasser
 import logging
 from gesture_glide.shortcuts.application_shortcut import ApplicationShortcut
 

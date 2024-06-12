@@ -1,3 +1,4 @@
+# Autoren: Isabel Barbu,Nick Büttner,Miguel Themann,Luke Grasser
 import enum
 from typing import Any, List
 

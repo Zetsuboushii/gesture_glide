@@ -1,3 +1,4 @@
+# Autoren: Nick Büttner,Miguel Themann,Luke Grasser
 import time
 from typing import List, Any, Callable
 

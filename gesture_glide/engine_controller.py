@@ -1,3 +1,4 @@
+# Autoren: Nick Büttner,Miguel Themann,Miguel Themann,Luke Grasser
 import time
 from threading import Thread
 

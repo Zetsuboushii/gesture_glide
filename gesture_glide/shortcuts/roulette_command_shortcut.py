@@ -1,3 +1,4 @@
+# Autoren: Nick Büttner,Miguel Themann
 import logging
 from gesture_glide.shortcuts.application_shortcut import ApplicationShortcut
 

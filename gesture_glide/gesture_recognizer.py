@@ -1,3 +1,4 @@
+# Autoren: Isabel Barbu,Nick Büttner,Miguel Themann,Luke Grasser
 import json
 import os
 import logging

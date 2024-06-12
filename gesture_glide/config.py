@@ -1,3 +1,4 @@
+# Autoren: Miguel Themann
 import enum
 from typing import List, Dict
 

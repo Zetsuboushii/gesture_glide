@@ -1,3 +1,4 @@
+# Autoren: Isabel Barbu,Nick Büttner,Luke Grasser
 import time
 import pywhatkit
 import logging
@@ -14,4 +15,3 @@ class RickRollShortcut(ApplicationShortcut):
             print("You're getting Rick'n'Rolled!!")
         except Exception as e:
             logging.error(e)
-
