@@ -11,6 +11,7 @@ from gesture_glide.hand_movement_recognizer import HandMovementRecognizer
 
 
 class EngineController:
+    """Main controller for managing all components of the processing, recognition, and interpretation components."""
     config: Config
     camera_handler: CameraHandler
     mp_wrapper: MPWrapper

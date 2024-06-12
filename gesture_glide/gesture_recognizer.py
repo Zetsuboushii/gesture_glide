@@ -7,6 +7,7 @@ from gesture_glide.utils import Observer, Observable, RecognizedGesture
 
 
 class GestureRecognizer(Observer, Observable):
+    """Recognizer of gestures based on hand landmarks, but no interpretation of them."""
     def __init__(self, config: Config, mp_wrapper: MPWrapper):
         super().__init__()
         self.config = config

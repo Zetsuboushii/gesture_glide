@@ -16,6 +16,7 @@ class FrameMetadata:
 
 
 class CameraHandler(Observable):
+    """Entrypoint for camera data (reads stream and notifies observers with frame data)."""
     stop_event: Event
 
     def __init__(self):

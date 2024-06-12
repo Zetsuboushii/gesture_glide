@@ -23,6 +23,7 @@ SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX = 4
 
 
 class HandMovementRecognizer(Observer, Observable):
+    """Recognizer for detecting hand movements, and interpreting scroll commands from it"""
     last_valid_right_hand_frame_data: FrameData | None
     last_valid_left_hand_frame_data: FrameData | None
 

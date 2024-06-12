@@ -18,9 +18,12 @@ class ApplicationShortcut:
     def get_current_window(self):
         # TODO: Delete redundant imports
         # for mac "support" as library isn't supported
-        from pywinauto import Desktop
-        active_window_handle = ctypes.windll.user32.GetForegroundWindow()
-        self.active_window = Desktop(backend="uia").window(handle=active_window_handle)
+        try:
+            from pywinauto import Desktop
+            active_window_handle = ctypes.windll.user32.GetForegroundWindow()
+            self.active_window = Desktop(backend="uia").window(handle=active_window_handle)
+        except Exception as e:
+            logging.error(e)
 
 
     def switch_to_previous_screen(self):

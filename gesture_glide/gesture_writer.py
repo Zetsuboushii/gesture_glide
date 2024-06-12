@@ -7,6 +7,7 @@ from gesture_glide.utils import Observer, Observable
 
 
 class GestureWriter(Observer, Observable):
+    """Gesture data management (for user configurable gestures)."""
     def __init__(self, config: Config, mp_wrapper: MPWrapper):
         super().__init__()
         self.landmarks = None

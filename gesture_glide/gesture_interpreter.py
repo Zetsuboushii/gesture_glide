@@ -48,6 +48,7 @@ class GestureInterpreter(Observer, Observable):
         self.scroll_shortcut.apply_user_settings(scroll_speed_multiplier)
 
     def should_process_new_gesture(self, gesture: RecognizedGesture | None) -> bool:
+        """Determine if gesture should be processed based on their cooldown period (in order to prevent multiple activations over multiple frames in a short interval."""
         current_time = time.time()
         time_diff = current_time - self.last_gesture_time
         if GestureMode.DEFAULT:
