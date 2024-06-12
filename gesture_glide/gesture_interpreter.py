@@ -4,6 +4,7 @@ from gesture_glide.gesture_recognizer import GestureRecognizer
 from gesture_glide.hand_movement_recognizer import HandMovementRecognizer
 from gesture_glide.mp_wrapper import MPWrapper
 from gesture_glide.shortcuts.generic_scroll_shortcut import GenericScrollShortcut
+from gesture_glide.shortcuts.rickroll_shortcut import RickRollShortcut
 from gesture_glide.shortcuts.roulette_command_shortcut import RouletteCommandShortcut
 from gesture_glide.shortcuts.roulette_open_shortcut import RouletteOpenShortcut
 from gesture_glide.utils import Observer, RecognizedGesture, GestureMode, Observable
@@ -23,6 +24,7 @@ class GestureInterpreter(Observer, Observable):
         self.scroll_shortcut = GenericScrollShortcut(config)
         self.roulette_open_shortcut = RouletteOpenShortcut(config)
         self.roulette_command_shortcut = RouletteCommandShortcut(config)
+        self.rickroll_shortcut = RickRollShortcut(config)
         self.last_gesture_time = 0
 
     def run(self):
@@ -79,6 +81,8 @@ class GestureInterpreter(Observer, Observable):
             case RecognizedGesture.OPEN_ROULETTE:
                 self.roulette_open_shortcut.execute()
                 self.gesture_mode = GestureMode.ROULETTE
+            case RecognizedGesture.RICK_ROLL:
+                self.rickroll_shortcut.execute()
 
     def process_roulette_mode_gesture(self, gesture):
         match gesture:

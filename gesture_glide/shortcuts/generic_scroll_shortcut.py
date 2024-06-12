@@ -4,7 +4,6 @@ import math
 import time
 from threading import Event, Thread
 
-from pywinauto import Desktop
 
 from gesture_glide.config import Config
 from gesture_glide.hand_movement_recognizer import ScrollData
