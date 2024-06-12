@@ -42,6 +42,7 @@ class GestureRecognizer(Observer, Observable):
             "OpenRoulette": RecognizedGesture.OPEN_ROULETTE,
             "EnlargeRouletteField": RecognizedGesture.ROULETTE_PLUS,
             "ReduceRouletteField": RecognizedGesture.ROULETTE_MINUS,
+            "RR": RecognizedGesture.RICK_ROLL,
         }
         return mapping.get(gesture_name)
 

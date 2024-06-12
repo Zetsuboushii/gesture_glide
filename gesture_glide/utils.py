@@ -46,6 +46,7 @@ class RecognizedGesture(enum.Enum):
     OPEN_ROULETTE = 0
     ROULETTE_PLUS = 1
     ROULETTE_MINUS = 2
+    RICK_ROLL = 3
 
 
 class GestureMode(enum.Enum):

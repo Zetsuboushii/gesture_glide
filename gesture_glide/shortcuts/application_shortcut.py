@@ -9,12 +9,11 @@ class ApplicationShortcut:
     def __init__(self, config: Config):
         self.config = config
         self.desktop = None
-        self.pdf_window = None
         self.init_scroll_backend()
         self.active_window = None
         self.last_active_window = None
 
-
+    # get the current window to apply shortcuts/ commands on it
     def get_current_window(self):
         # TODO: Delete redundant imports
         # for mac "support" as library isn't supported
@@ -38,7 +37,6 @@ class ApplicationShortcut:
             # for mac "support" as library isn't supported
             from pywinauto import Desktop
             self.desktop = Desktop(backend="uia")
-            self.pdf_window = self.desktop.window(class_name="AcrobatSDIWindow")
         except Exception as e:
             logging.error(e)
 
