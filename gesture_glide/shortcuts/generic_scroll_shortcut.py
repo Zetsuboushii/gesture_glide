@@ -19,6 +19,7 @@ class GenericScrollShortcut(ApplicationShortcut):
         self.scroll_data = None
 
     def execute(self, **kwargs):
+        """Set scroll command to be executed by running scroll loop."""
         scroll_command = kwargs["scroll_command"]
         self.scroll_data = scroll_command
         if scroll_command is not None:
@@ -27,13 +28,16 @@ class GenericScrollShortcut(ApplicationShortcut):
             self.scrolling.clear()
 
     def run(self):
+        """Execute scroll loop in separate thread"""
         self.terminate.clear()
         Thread(target=self.run_scroll_loop).start()
 
     def stop(self):
+        """Instruct scroll loop to terminate."""
         self.terminate.set()
 
     def run_scroll_loop(self):
+        """Execute scroll loop (blocking). Loop is responsible for decoupling scroll commands (esp. because of calculation FPS) and their execution."""
         while not self.terminate.is_set():
             if self.scrolling.is_set():
                 if self.scroll_data is not None:
