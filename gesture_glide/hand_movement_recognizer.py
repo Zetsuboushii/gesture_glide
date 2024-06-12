@@ -12,14 +12,11 @@ from gesture_glide.utils import Observer, Observable, Handedness, ScrollDirectio
     ScrollData, \
     HandMovementState, HandMovementType, HandMovementData, FrameData
 
-# TODO maybe change delta if needed
-DELTA_TIME = 0.5
-# TODO keep an eye on naming !
 INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD = 0.10
 SCROLL_COMMAND_SPEED_THRESHOLD = 0.25
-HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD = 0.15 # Treshold for detecting that 2 hands transferred detected side (for mono hand)
-SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD = 93
-SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX = 4
+HAND_TRANSFER_MAXIMUM_WRIST_DISTANCE_THRESHOLD = 0.15 # threshold to detect if one hand falsely changes its handedness
+SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD = 93 # includes time between frames
+SPREAD_DELTA_CALCULATION_PREVIOUS_FRAME_IDX = 4 # nth last frame that is used to calculate delta spread with current frame
 
 
 class HandMovementRecognizer(Observer, Observable):
@@ -36,15 +33,10 @@ class HandMovementRecognizer(Observer, Observable):
         self.last_valid_left_hand_frame_data = None
         self.apply_user_settings(1.0, 1.0)
 
-    def apply_user_settings(self, speed_threshold_multiplayer: float, spread_threshold_multiplier: float):
-        self.inter_frame_movement_detection_relative_speed_threshold = INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD * speed_threshold_multiplayer
+    def apply_user_settings(self, speed_threshold_multiplier: float, spread_threshold_multiplier: float):
+        # applies the multiplier from the ui slider to the threshold
+        self.inter_frame_movement_detection_relative_speed_threshold = INTER_FRAME_MOVEMENT_DETECTION_RELATIVE_SPEED_THRESHOLD * speed_threshold_multiplier
         self.scroll_enablement_spread_delta_threshold = SCROLL_ENABLEMENT_SPREAD_DELTA_THRESHOLD * spread_threshold_multiplier
-
-    def get_past_comparison_hand(self, hand_data_buffer):
-        try:
-            return next(x.results for x in hand_data_buffer if x.time > time.time() - DELTA_TIME)
-        except StopIteration:
-            return None
 
     def get_hand_spread(self, landmarks: List[Landmark]) -> float | None:
         if len(landmarks) < 2:

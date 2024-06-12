@@ -12,9 +12,6 @@ class RickRollShortcut(ApplicationShortcut):
         try:
             pywhatkit.playonyt("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
             print("You're getting Rick'n'Rolled!!")
-            time.sleep(5)
-            from pywinauto.keyboard import send_keys
-            send_keys("{SPACE}")
         except Exception as e:
             logging.error(e)
 

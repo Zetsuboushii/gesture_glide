@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from gesture_glide.mp_wrapper import MPWrapper
