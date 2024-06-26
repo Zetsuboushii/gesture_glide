@@ -1,10 +1,8 @@
-# Autoren: Nick Büttner,Miguel Themann,Miguel Themann,Luke Grasser
 import threading
+import os
 from tkinter import Tk, Frame, StringVar, ttk, Entry, HORIZONTAL, Scale
-
 import cv2
 from PIL import ImageTk, Image
-
 from gesture_glide.engine_controller import EngineController
 from gesture_glide.utils import Observer, GestureMode
 
@@ -73,6 +71,13 @@ def setup_gui(root: Tk, controller: EngineController):
             scroll_speed_slider.get() / 100.0
         )
 
+    def delete_gestures_file():
+        try:
+            os.remove("gestures.json")
+            print("gestures.json deleted successfully")
+        except FileNotFoundError:
+            print("gestures.json not found")
+
     frame_rate = StringVar()
     gesture_mode = StringVar()
     frame = Frame(root, width=500, height=500)
@@ -114,6 +119,8 @@ def setup_gui(root: Tk, controller: EngineController):
     ttk.Button(data_container, text="Capture", command=lambda: capture(controller, gesture_name)).grid(column=4, row=1,
                                                                                                        sticky="W")
     ttk.Button(data_container, text="Apply", command=apply_user_settings).grid(column=5, row=1, sticky="W")
+    ttk.Button(data_container, text="Delete gestures.json", command=delete_gestures_file).grid(column=6, row=1,
+                                                                                               sticky="W")
 
     handler = DataHandler()
     controller.camera_handler.add_observer(handler)
