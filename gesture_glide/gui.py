@@ -119,7 +119,7 @@ def setup_gui(root: Tk, controller: EngineController):
     ttk.Button(data_container, text="Capture", command=lambda: capture(controller, gesture_name)).grid(column=4, row=1,
                                                                                                        sticky="W")
     ttk.Button(data_container, text="Apply", command=apply_user_settings).grid(column=5, row=1, sticky="W")
-    ttk.Button(data_container, text="Delete gestures.json", command=delete_gestures_file).grid(column=6, row=1,
+    ttk.Button(data_container, text="Delete saved gestures", command=delete_gestures_file).grid(column=6, row=1,
                                                                                                sticky="W")
 
     handler = DataHandler()
