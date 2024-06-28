@@ -60,13 +60,31 @@ zu entdecken gilt...
      6. Am Ende deiner Bewegung öffne erneut deine Hand (als würdest du das Seil loslassen), achte darauf, dass eine Bewegung wirklich zum Stillstand kommt.
      7. Nun kannst du eine erneute Bewegung ausführen und weiter scrollen (nach Abschluss einer Bewegung, dauert es einen kurzen Moment
         bis du erneut scrollen kannst, damit es zu keinen Fehlerkennung kommt, wenn du nur deine Hand wieder ablegen möchtest)
-     8. Sollte die Erkennung nicht so laufen wie gewünscht, dann nutzte die Slider im GUI
+     8. Sollte die Erkennung nicht so laufen wie gewünscht, dann nutzte die Slider im GUI und drücke wenn du alles eingestellt hast auf den Apply-Knopf
         - Speed Threshold stellt ein wie schnell du deine Handbewegen musst, damit eine Bewegung erkannt wird
         - Spread Threshold stellt ein wie schnell und weit du deine Hand zu machen musst, damit eine Bewegung erkannt wird
         - Scrolling Speed stellt die Geschwindigkeit des Scrollens in deinem angeklickten Fenster ein 
    - Glücksrad:
-     1. 
-   - ??? (RR):
+     1.  Speichere deine gewünschten Gesten in der App ab, benutzte dazu das Textfeld namens "Gesture Name" und gib einen 
+         der folgenden Befehle ein und halte deine Hand mit der gewünschten Geste in die Kamera, drücke darauf hin den Capture-Knopf
+         damit die Geste für den Befehl gespeichert wird. Wenn du alles eingespeichert hast, starte die App neu und deine
+         Gesten sind nun einsatz bereit (Hinweis: nehme zum Speichern der Gesten die Distanz zur Kamera ein, die du auch wirklich haben wirst, wenn du sie ausführen möchtest).
+         - OpenRoulette, zum Wechseln zwischen dem Default (Scrolling) und Roulette Mode ein, wobei zum Glücksrad oder zur
+         zuletzt geöffneten Fenster gesprungen wird
+         - EnlargeRouletteField um ein Glücksradfeld zu vergrößern
+         - ReduceRouletteField um ein Glücksradfeld zu verkleinern
+     2. Habe die Glücksradapp geöffnet, du musst sie aber nicht angeklickt haben
+     3. Führe nun deine Geste zum Wechseln ins Glücksrad vor der Kamera vor
+     4. Daraufhin ändert der Modus sich von DEFAULT zu ROULETTE und das Glücksrad ist nun im Vordergrund
+     5. Führe eine Scrollbewegung in egal welcher Richtung aus, um das Glücksrad zu drehen
+     6. Wenn der Ball auf einem Segment liegt, dann kannst du deine entsprechenden Gesten zum Vergrößern oder Verkleinern der Felder verwenden
+     7. Wenn du wieder Scrollen möchtest, dann verwende wieder die Geste, mit der du das Glücksrad geöffnet hast, dann 
+        wird das vorherige Fenster vor dem Öffnen des Roulettes in den Vordergrund gebracht und der Modus ändert sich zu DEFAULT
+     8. Du kannst auch mehrere Gesten für einen Befehl speichern, solltest du sie löschen wollen, dann drücke auf den Delete saved gestures Knopf
+        und alle gespeicherten Gesten werden gelöscht. Starte darauf hin die App erneut, um neue Gesten einzuspeichern
+   - ???:
+     1. Wie im Glücksrad beschrieben, speichere eine weitere Geste mit dem Namen RR ein
+     2. Führe sie durch und schau was passiert :^)
 
 5. Die App kannst du jederzeit pausieren und wieder fortsetzen lassen in dem du die zugehörigen Knöpfe drückst
 6. Beenden kannst du die App über den Quit-Knopf oder über das X am oberen Rand des Fensters
